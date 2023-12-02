@@ -4,14 +4,6 @@ import messaging from '@react-native-firebase/messaging';
 
 export const useNotificationListener = () => {
   useEffect(() => {
-    const unsubscribeOpenedAppNotification =
-      messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log(
-          'Notification caused app to open from background state:',
-          remoteMessage.notification,
-        );
-      });
-
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
@@ -23,9 +15,13 @@ export const useNotificationListener = () => {
         }
       });
 
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });
+    const unsubscribeOpenedAppNotification =
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage.notification,
+        );
+      });
 
     const unsubscribeForegroundNotification = messaging().onMessage(
       async remoteMessage => {

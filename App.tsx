@@ -1,10 +1,14 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, Text, StyleSheet} from 'react-native';
 
+import {useSubscribeTopics} from './src/hooks/useSubscribeTopics';
 import {useNotificationListener} from './src/hooks/useNotificationListener';
 import {requestUserPermission} from './src/utils/requestUserPermission';
 
+const topics = ['class1', 'class2'];
+
 export default function App() {
+  useSubscribeTopics(topics);
   useNotificationListener();
 
   useEffect(() => {
