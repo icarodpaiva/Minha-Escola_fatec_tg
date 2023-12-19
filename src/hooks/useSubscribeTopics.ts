@@ -12,5 +12,5 @@ export const useSubscribeTopics = async (topics: string[]) => {
         messaging().unsubscribeFromTopic(topic);
       });
     };
-  }, []);
+  }, [topics]);
 };
