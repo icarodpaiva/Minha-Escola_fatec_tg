@@ -1,30 +1,10 @@
 import React, { useState } from "react"
-import {
-  Alert,
-  StyleSheet,
-  View,
-  AppState,
-  Button,
-  TextInput
-} from "react-native"
+import { Alert, View, Button, TextInput, StyleSheet } from "react-native"
 
 import { supabase } from "../configs/supabase"
-import { useNavigation } from "../hooks/useNavigation"
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { AuthStackParamList } from "../navigation/AuthStack"
-
-// Tells Supabase Auth to continuously refresh the session automatically if
-// the app is in the foreground. When this is added, you will continue to receive
-// `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event
-// if the user's session is terminated. This should only be registered once.
-AppState.addEventListener("change", state => {
-  if (state === "active") {
-    supabase.auth.startAutoRefresh()
-  } else {
-    supabase.auth.stopAutoRefresh()
-  }
-})
 
 type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, "Login">
 
@@ -33,27 +13,19 @@ export const LoginScreen = ({}: Readonly<LoginScreenProps>) => {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const { navigate } = useNavigation()
-
   async function signInWithEmail() {
     setLoading(true)
 
-    const { error, data } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password
     })
-
-    console.log("data", data)
 
     if (error) {
       Alert.alert(error.message)
     }
 
     setLoading(false)
-  }
-
-  const handleNavigate = () => {
-    navigate("App", { screen: "Home" })
   }
 
   return (
@@ -81,13 +53,6 @@ export const LoginScreen = ({}: Readonly<LoginScreenProps>) => {
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button title="Entrar" disabled={loading} onPress={signInWithEmail} />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title="Navegar para home"
-          disabled={loading}
-          onPress={handleNavigate}
-        />
       </View>
     </View>
   )

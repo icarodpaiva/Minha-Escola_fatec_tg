@@ -1,9 +1,14 @@
 import React from "react"
 
+import { AuthContextProvider, initialValue } from "./src/contexts/AuthContext"
 import { RootNavigator } from "./src/navigation"
 
 export default function App() {
-  return <RootNavigator />
+  return (
+    <AuthContextProvider {...initialValue}>
+      <RootNavigator />
+    </AuthContextProvider>
+  )
 }
 
 // import React, { useCallback, useEffect, useState } from "react"
