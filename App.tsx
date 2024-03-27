@@ -1,12 +1,12 @@
 import React from "react"
 
 import { AuthContextProvider, initialValue } from "./src/contexts/AuthContext"
-import { RootNavigator } from "./src/navigation"
+import { RootStack } from "./src/navigation"
 
 export default function App() {
   return (
     <AuthContextProvider {...initialValue}>
-      <RootNavigator />
+      <RootStack />
     </AuthContextProvider>
   )
 }

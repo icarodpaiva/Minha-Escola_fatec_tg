@@ -19,7 +19,7 @@ type RootStackParamList = {
 
 const { Navigator, Screen } = createNativeStackNavigator<RootStackParamList>()
 
-export const RootNavigator = () => {
+export const RootStack = () => {
   const { loading, accessToken } = useAuthContext()
 
   if (loading) {
