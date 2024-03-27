@@ -27,7 +27,16 @@ export const useNotificationListener = () => {
     })
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert(JSON.stringify(remoteMessage))
+      if (remoteMessage.notification) {
+        const { title, body: message } = remoteMessage.notification
+
+        Alert.alert(
+          JSON.stringify({
+            title,
+            message
+          })
+        )
+      }
     })
 
     return unsubscribe
