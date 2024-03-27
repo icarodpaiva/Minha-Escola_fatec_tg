@@ -1,37 +1,44 @@
-import {useEffect} from 'react';
-import {Alert} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+import { useEffect } from "react"
+import { Alert } from "react-native"
+import messaging from "@react-native-firebase/messaging"
 
 export const useNotificationListener = () => {
   useEffect(() => {
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log("Message handled in the background!", remoteMessage)
+    })
+
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
         if (remoteMessage) {
           console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
+            "Notification caused app to open from quit state:",
+            remoteMessage.notification
+          )
         }
-      });
+      })
 
-    const unsubscribeOpenedAppNotification =
-      messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log(
-          'Notification caused app to open from background state:',
-          remoteMessage.notification,
-        );
-      });
+    messaging().onNotificationOpenedApp(async remoteMessage => {
+      console.log(
+        "Notification caused app to open from background state:",
+        remoteMessage.notification
+      )
+    })
 
-    const unsubscribeForegroundNotification = messaging().onMessage(
-      async remoteMessage => {
-        Alert.alert(JSON.stringify(remoteMessage));
-      },
-    );
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if (remoteMessage.notification) {
+        const { title, body: message } = remoteMessage.notification
 
-    return () => {
-      unsubscribeOpenedAppNotification();
-      unsubscribeForegroundNotification();
-    };
-  }, []);
-};
+        Alert.alert(
+          JSON.stringify({
+            title,
+            message
+          })
+        )
+      }
+    })
+
+    return unsubscribe
+  }, [])
+}
