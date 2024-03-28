@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { View, Button, StyleSheet, Alert } from "react-native"
 
 import { Loading } from "../components/Loading"
+import { PersonalData } from "../components/PersonalData/PersonalData"
+import { Classes } from "../components/Classes/Classes"
 
 import { supabase } from "../configs/supabase"
 import { useAuthContext } from "../contexts/AuthContext"
-import { usePersonalData } from "../hooks/usePersonalData"
-import { useClasses } from "../hooks/useClasses"
+import { useSubscribeTopics } from "../hooks/useSubscribeTopics"
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { AppStackParamList } from "../navigation/AppStack"
@@ -15,8 +16,7 @@ type HomeScreenProps = NativeStackScreenProps<AppStackParamList, "Home">
 
 export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const accessToken = useAuthContext().accessToken as string
-  const { loadingPersonalData, personalData } = usePersonalData(accessToken)
-  const { loadingClasses, classes } = useClasses(accessToken)
+  useSubscribeTopics(accessToken)
 
   const handleNotifications = () => {
     navigation.navigate("Notifications")
@@ -35,17 +35,21 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
     setLoading(false)
   }
+
   if (loading) {
     return <Loading />
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+    <View>
+      <PersonalData />
+      <Classes />
+
+      <View style={[styles.verticallySpaced]}>
         <Button title="Sair" onPress={handleLogout} />
       </View>
 
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced]}>
         <Button title="Notificações" onPress={handleNotifications} />
       </View>
     </View>
@@ -53,16 +57,9 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12
-  },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: "stretch"
-  },
-  mt20: {
-    marginTop: 20
   }
 })

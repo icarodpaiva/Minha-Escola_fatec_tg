@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 import { fetchData } from "../configs/api"
 
-interface Class {
+export interface Class {
   id: number
   subject: string
   teacher: string | null
@@ -16,7 +16,10 @@ interface Class {
   }
 }
 
-export const useClasses = (accessToken: string) => {
+export const useClasses = (
+  accessToken: string,
+  date: string = new Date().toISOString()
+) => {
   const [loadingClasses, setLoadingClasses] = useState(false)
   const [classes, setClasses] = useState<Class[] | null>(null)
 
@@ -25,7 +28,11 @@ export const useClasses = (accessToken: string) => {
       try {
         setLoadingClasses(true)
 
-        const { data } = await fetchData(accessToken).get("/classes")
+        const { data } = await fetchData(accessToken).get("/classes", {
+          params: {
+            date: date.replace(/T.*/, "") // Remove time
+          }
+        })
         setClasses(data)
       } catch {
         setClasses(null)

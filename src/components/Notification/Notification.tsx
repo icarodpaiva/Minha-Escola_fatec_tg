@@ -1,4 +1,4 @@
-import { Text, View } from "react-native"
+import { Text, View, StyleSheet } from "react-native"
 
 import type { Notification as INotification } from "../../hooks/useNotifications"
 
@@ -7,10 +7,10 @@ interface NotificationProps {
 }
 
 export const Notification = ({ notification }: NotificationProps) => {
-  const { id, subject, author, created_at, title, message } = notification
+  const { subject, author, created_at, title, message } = notification
 
   return (
-    <View key={id}>
+    <View style={styles.container}>
       <Text>Matéria: {subject}</Text>
       <Text>Enviado por: {author}</Text>
       <Text>Data: {created_at}</Text>
@@ -19,3 +19,9 @@ export const Notification = ({ notification }: NotificationProps) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 20
+  }
+})

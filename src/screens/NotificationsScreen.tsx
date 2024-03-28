@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, ScrollView, StyleSheet } from "react-native"
 
 import { Loading } from "../components/Loading"
 
@@ -24,19 +24,15 @@ export const NotificationsScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView>
       {notifications.map(notification => (
         <Notification key={notification.id} notification={notification} />
       ))}
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12
-  },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
