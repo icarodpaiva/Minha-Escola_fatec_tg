@@ -17,8 +17,8 @@ export const LoginScreen = ({}: Readonly<LoginScreenProps>) => {
     setLoading(true)
 
     const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password
+      email,
+      password
     })
 
     if (error) {

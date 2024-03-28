@@ -4,10 +4,26 @@ import { View, Button, StyleSheet, Alert } from "react-native"
 import { Loading } from "../components/Loading"
 
 import { supabase } from "../configs/supabase"
+import { useAuthContext } from "../contexts/AuthContext"
+import { usePersonalData } from "../hooks/usePersonalData"
+import { useClasses } from "../hooks/useClasses"
 
-export const HomeScreen = () => {
+import type { NativeStackScreenProps } from "@react-navigation/native-stack"
+import type { AppStackParamList } from "../navigation/AppStack"
+
+type HomeScreenProps = NativeStackScreenProps<AppStackParamList, "Home">
+
+export const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const accessToken = useAuthContext().accessToken as string
+  const { loadingPersonalData, personalData } = usePersonalData(accessToken)
+  const { loadingClasses, classes } = useClasses(accessToken)
+
+  const handleNotifications = () => {
+    navigation.navigate("Notifications")
+  }
+
+  // TO-DO: Move this to PersonalDataScreen
   const [loading, setLoading] = useState(false)
-
   const handleLogout = async () => {
     setLoading(true)
 
@@ -19,7 +35,6 @@ export const HomeScreen = () => {
 
     setLoading(false)
   }
-
   if (loading) {
     return <Loading />
   }
@@ -28,6 +43,10 @@ export const HomeScreen = () => {
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button title="Sair" onPress={handleLogout} />
+      </View>
+
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Button title="Notificações" onPress={handleNotifications} />
       </View>
     </View>
   )
