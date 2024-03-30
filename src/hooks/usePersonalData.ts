@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 import { fetchData } from "../configs/api"
 
-interface Student {
+interface PersonalData {
   id: number
   name: string
   email: string
@@ -12,7 +12,7 @@ interface Student {
 
 export const usePersonalData = (accessToken: string) => {
   const [loadingPersonalData, setLoadingPersonalData] = useState(false)
-  const [personalData, setPersonalData] = useState<Student | null>(null)
+  const [personalData, setPersonalData] = useState<PersonalData | null>(null)
 
   useEffect(() => {
     const request = async () => {

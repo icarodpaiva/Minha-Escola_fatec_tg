@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 
-import { Loading } from "../Loading"
+import { Loading } from "./Loading"
 import { Class } from "./Class"
 
-import { useAuthContext } from "../../contexts/AuthContext"
-import { useClasses } from "../../hooks/useClasses"
+import { useAuthContext } from "../contexts/AuthContext"
+import { useClasses } from "../hooks/useClasses"
 
 export const Classes = () => {
   const accessToken = useAuthContext().accessToken as string

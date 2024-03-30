@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet } from "react-native"
 
-import type { Notification as INotification } from "../../hooks/useNotifications"
+import type { Notification as INotification } from "../hooks/useNotifications"
 
 interface NotificationProps {
   notification: INotification

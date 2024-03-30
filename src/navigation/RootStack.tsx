@@ -12,7 +12,7 @@ import type { NavigatorScreenParams } from "@react-navigation/native"
 import type { AuthStackParamList } from "./AuthStack"
 import type { AppStackParamList } from "./AppStack"
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>
   App: NavigatorScreenParams<AppStackParamList>
 }

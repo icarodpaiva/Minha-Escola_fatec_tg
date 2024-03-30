@@ -5,7 +5,7 @@ import { Loading } from "../components/Loading"
 
 import { useAuthContext } from "../contexts/AuthContext"
 import { useNotifications } from "../hooks/useNotifications"
-import { Notification } from "../components/Notification/Notification"
+import { Notification } from "../components/Notification"
 
 export const NotificationsScreen = () => {
   const accessToken = useAuthContext().accessToken as string

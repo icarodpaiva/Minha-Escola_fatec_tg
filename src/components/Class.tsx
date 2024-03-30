@@ -1,12 +1,16 @@
-import { Text, View, StyleSheet } from "react-native"
+import { Pressable, Text, StyleSheet } from "react-native"
 
-import type { Class as IClass } from "../../hooks/useClasses"
+import { useNavigation } from "../hooks/useNavigation"
+
+import type { Class as IClass } from "../hooks/useClasses"
 
 interface ClassProps {
   groupClass: IClass
 }
 
 export const Class = ({ groupClass }: ClassProps) => {
+  const { navigate } = useNavigation()
+
   const {
     subject,
     teacher,
@@ -16,8 +20,12 @@ export const Class = ({ groupClass }: ClassProps) => {
     location: { building, floor, classroom }
   } = groupClass
 
+  const handleClass = () => {
+    navigate("App", { screen: "Class", params: { groupClass } })
+  }
+
   return (
-    <View style={styles.container}>
+    <Pressable onPress={handleClass} style={styles.container}>
       <Text>Matéria: {subject}</Text>
       <Text>Professor: {teacher}</Text>
       <Text>Data: {date}</Text>
@@ -26,7 +34,7 @@ export const Class = ({ groupClass }: ClassProps) => {
       <Text>Prédio: {building}</Text>
       <Text>Andar: {floor}</Text>
       <Text>Sala de aula: {classroom}</Text>
-    </View>
+    </Pressable>
   )
 }
 
