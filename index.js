@@ -1,14 +1,14 @@
 import React from "react"
 import { AppRegistry, Platform } from "react-native"
 import messaging from "@react-native-firebase/messaging"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import App from "./App"
 
 import { name as appName } from "./app.json"
 
-// Register background handler
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.info("Message handled in the background!", remoteMessage)
+messaging().setBackgroundMessageHandler(async _remoteMessage => {
+  await AsyncStorage.setItem("hasNewNotification", "true")
 })
 
 // Check if app was launched in the background and conditionally render null if so

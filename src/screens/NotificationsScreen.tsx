@@ -1,15 +1,25 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { View, Text, ScrollView, StyleSheet } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Loading } from "../components/Loading"
+import { Notification } from "../components/Notification"
 
 import { useAuthContext } from "../contexts/AuthContext"
+import { useAppContext } from "../contexts/AppContext"
 import { useNotifications } from "../hooks/useNotifications"
-import { Notification } from "../components/Notification"
 
 export const NotificationsScreen = () => {
   const accessToken = useAuthContext().accessToken as string
   const { loadingNotifications, notifications } = useNotifications(accessToken)
+
+  const { setHasNewNotification } = useAppContext()
+
+  useEffect(() => {
+    AsyncStorage.setItem("hasNewNotification", "false").then(() => {
+      setHasNewNotification(false)
+    })
+  }, [])
 
   if (loadingNotifications) {
     return <Loading />

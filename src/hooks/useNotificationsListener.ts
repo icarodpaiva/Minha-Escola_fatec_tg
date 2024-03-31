@@ -1,6 +1,10 @@
 import { useEffect } from "react"
 import { PermissionsAndroid, Platform, Alert } from "react-native"
 import messaging from "@react-native-firebase/messaging"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+import { useAppContext } from "../contexts/AppContext"
+import { useNavigation } from "./useNavigation"
 
 const { AUTHORIZED, PROVISIONAL } = messaging.AuthorizationStatus
 
@@ -26,29 +30,25 @@ const requestUserPermission = async () => {
   }
 }
 
-const quitStateNotification = async () => {
+const quitStateNotification = async (callback: () => void) => {
   const remoteMessage = await messaging().getInitialNotification()
 
   if (remoteMessage) {
-    console.log(
-      "Notification caused app to open from quit state:",
-      remoteMessage.notification
-    )
+    callback()
   }
 }
 
-const backgroundNotification = () => {
-  messaging().onNotificationOpenedApp(remoteMessage => {
-    console.log(
-      "Notification caused app to open from background state:",
-      remoteMessage.notification
-    )
+const backgroundNotification = (callback: () => void) => {
+  messaging().onNotificationOpenedApp(_remoteMessage => {
+    callback()
   })
 }
 
-const foregroundNotification = () => {
-  return messaging().onMessage(remoteMessage => {
+const foregroundNotification = (callback: () => Promise<void>) => {
+  return messaging().onMessage(async remoteMessage => {
     if (remoteMessage.notification) {
+      await callback()
+
       const { title, body: message } = remoteMessage.notification
 
       Alert.alert(
@@ -62,11 +62,23 @@ const foregroundNotification = () => {
 }
 
 export const useNotificationsListener = () => {
+  const { setHasNewNotification } = useAppContext()
+  const { navigate } = useNavigation()
+
+  const navigateToNotifications = () => {
+    navigate("App", { screen: "Notifications" })
+  }
+
+  const newNotification = async () => {
+    await AsyncStorage.setItem("hasNewNotification", "true")
+    setHasNewNotification(true)
+  }
+
   useEffect(() => {
     requestUserPermission()
-    quitStateNotification()
-    backgroundNotification()
-    const unsubscribe = foregroundNotification()
+    quitStateNotification(navigateToNotifications)
+    backgroundNotification(navigateToNotifications)
+    const unsubscribe = foregroundNotification(newNotification)
 
     return unsubscribe
   }, [])

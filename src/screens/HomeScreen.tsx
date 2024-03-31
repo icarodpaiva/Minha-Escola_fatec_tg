@@ -1,10 +1,11 @@
-import React, { useEffect } from "react"
-import { View, Button, StyleSheet } from "react-native"
+import React from "react"
+import { View, Button, StyleSheet, Text } from "react-native"
 
 import { PersonalData } from "../components/PersonalData"
 import { Classes } from "../components/Classes"
 
 import { useAuthContext } from "../contexts/AuthContext"
+import { useAppContext } from "../contexts/AppContext"
 import { useSubscribeTopics } from "../hooks/useSubscribeTopics"
 import { useNotificationsListener } from "../hooks/useNotificationsListener"
 
@@ -17,6 +18,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const accessToken = useAuthContext().accessToken as string
   useSubscribeTopics(accessToken)
   useNotificationsListener()
+  const { hasNewNotification } = useAppContext()
 
   const handleNotifications = () => {
     navigation.navigate("Notifications")
@@ -26,6 +28,8 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
     <View>
       <PersonalData />
       <Classes />
+
+      {hasNewNotification && <Text>Há notificações não visualizadas</Text>}
       <View style={[styles.verticallySpaced]}>
         <Button title="Notificações" onPress={handleNotifications} />
       </View>

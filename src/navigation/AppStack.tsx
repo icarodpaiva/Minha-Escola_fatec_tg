@@ -1,6 +1,7 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { AppContextProvider, initialValue } from "../contexts/AppContext"
 import {
   HomeScreen,
   PersonalDataScreen,
@@ -21,27 +22,29 @@ const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
 
 export const AppStack = () => {
   return (
-    <Navigator>
-      <Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Screen
-        name="PersonalData"
-        component={PersonalDataScreen}
-        options={{ headerTitle: "Dados Pessoais" }}
-      />
-      <Screen
-        name="Class"
-        component={ClassScreen}
-        options={{ headerTitle: "Detalhes da aula" }}
-      />
-      <Screen
-        name="Notifications"
-        component={NotificationsScreen}
-        options={{ headerTitle: "Notificações" }}
-      />
-    </Navigator>
+    <AppContextProvider {...initialValue}>
+      <Navigator>
+        <Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Screen
+          name="PersonalData"
+          component={PersonalDataScreen}
+          options={{ headerTitle: "Dados Pessoais" }}
+        />
+        <Screen
+          name="Class"
+          component={ClassScreen}
+          options={{ headerTitle: "Detalhes da aula" }}
+        />
+        <Screen
+          name="Notifications"
+          component={NotificationsScreen}
+          options={{ headerTitle: "Notificações" }}
+        />
+      </Navigator>
+    </AppContextProvider>
   )
 }
