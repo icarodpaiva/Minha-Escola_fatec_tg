@@ -7,8 +7,10 @@ import App from "./App"
 
 import { name as appName } from "./app.json"
 
-messaging().setBackgroundMessageHandler(async _remoteMessage => {
-  await AsyncStorage.setItem("hasNewNotification", "true")
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  if (remoteMessage.notification) {
+    await AsyncStorage.setItem("hasNewNotification", "true")
+  }
 })
 
 // Check if app was launched in the background and conditionally render null if so

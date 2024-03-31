@@ -43,7 +43,7 @@ export const useClasses = (
     }
 
     request()
-  }, [])
+  }, [date])
 
   return { loadingClasses, classes }
 }
