@@ -1,12 +1,19 @@
 import React, { useState } from "react"
-import { Alert, View, Button, StyleSheet } from "react-native"
-
-import { PersonalData } from "../components/PersonalData"
+import { Alert, View, Button, StyleSheet, Text } from "react-native"
+import QRCode from "react-native-qrcode-svg"
 
 import { supabase } from "../configs/supabase"
 import { Loading } from "../components/Loading"
 
-export const PersonalDataScreen = () => {
+import type { NativeStackScreenProps } from "@react-navigation/native-stack"
+import type { AppStackParamList } from "../navigation/AppStack"
+
+type PersonalDataScreenProps = NativeStackScreenProps<
+  AppStackParamList,
+  "PersonalData"
+>
+
+export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
   const [loading, setLoading] = useState(false)
 
   const handleLogout = async () => {
@@ -25,9 +32,19 @@ export const PersonalDataScreen = () => {
     return <Loading />
   }
 
+  const { name, email, sr, document, course, semester } =
+    route.params.personalData
+
   return (
     <>
-      <PersonalData />
+      <Text>Nome: {name}</Text>
+      <Text>E-mail: {email}</Text>
+      <Text>RA: {sr}</Text>
+      <Text>CPF: {document}</Text>
+      <Text>Curso: {course}</Text>
+      <Text>Semestre: {semester}</Text>
+
+      <QRCode size={350} value={sr} />
 
       <View style={[styles.verticallySpaced]}>
         <Button title="Sair" onPress={handleLogout} />

@@ -24,10 +24,10 @@ export const PersonalData = () => {
     )
   }
 
-  const { name, email, sr, document } = personalData
+  const { name, email, sr } = personalData
 
   const handlePersonalData = () => {
-    navigate("App", { screen: "PersonalData" })
+    navigate("App", { screen: "PersonalData", params: { personalData } })
   }
 
   return (
@@ -35,7 +35,6 @@ export const PersonalData = () => {
       <Text>Nome: {name}</Text>
       <Text>E-mail: {email}</Text>
       <Text>RA: {sr}</Text>
-      <Text>CPF: {document}</Text>
 
       <QRCode size={100} value={sr} />
     </Pressable>

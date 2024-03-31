@@ -9,11 +9,12 @@ import {
   NotificationsScreen
 } from "../screens"
 
+import type { PersonalData } from "../hooks/usePersonalData"
 import type { Class } from "../hooks/useClasses"
 
 export type AppStackParamList = {
   Home: undefined
-  PersonalData: undefined
+  PersonalData: { personalData: PersonalData }
   Class: { groupClass: Class }
   Notifications: undefined
 }

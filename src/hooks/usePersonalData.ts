@@ -2,12 +2,14 @@ import { useState, useEffect } from "react"
 
 import { fetchData } from "../configs/api"
 
-interface PersonalData {
+export interface PersonalData {
   id: number
   name: string
   email: string
   sr: string
   document: string
+  course: string
+  semester: number
 }
 
 export const usePersonalData = (accessToken: string) => {
