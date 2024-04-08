@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Alert, View, Button, StyleSheet, Text } from "react-native"
-import QRCode from "react-native-qrcode-svg"
 
 import { supabase } from "../configs/supabase"
 import { Loading } from "../components/Loading"
+import { QRCode } from "../components/QRCode"
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { AppStackParamList } from "../navigation/AppStack"
@@ -39,12 +39,12 @@ export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
     <>
       <Text>Nome: {name}</Text>
       <Text>E-mail: {email}</Text>
-      <Text>RA: {sr}</Text>
       <Text>CPF: {document}</Text>
-      <Text>Curso: {course}</Text>
-      <Text>Semestre: {semester}</Text>
+      {sr && <Text>RA: {sr}</Text>}
+      {course && <Text>Curso: {course}</Text>}
+      {semester && <Text>Semestre: {semester}</Text>}
 
-      <QRCode size={350} value={sr} />
+      <QRCode size={350} value={sr ?? document} />
 
       <View style={[styles.verticallySpaced]}>
         <Button title="Sair" onPress={handleLogout} />

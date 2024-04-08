@@ -5,14 +5,12 @@ import { Loading } from "./Loading"
 import { DatePicker } from "./DatePicker"
 import { Class } from "./Class"
 
-import { useAuthContext } from "../contexts/AuthContext"
 import { useClasses } from "../hooks/useClasses"
 
 export const Classes = () => {
   const [date, setDate] = useState(new Date().toISOString().replace(/T.*/, ""))
 
-  const accessToken = useAuthContext().accessToken as string
-  const { loadingClasses, classes } = useClasses(accessToken, date)
+  const { loadingClasses, classes, refetch } = useClasses(date)
 
   if (loadingClasses) {
     return <Loading />
@@ -27,7 +25,11 @@ export const Classes = () => {
       ) : (
         <>
           {classes.map(groupClass => (
-            <Class key={groupClass.id} groupClass={groupClass} />
+            <Class
+              key={groupClass.id}
+              groupClass={groupClass}
+              refetch={refetch}
+            />
           ))}
         </>
       )}

@@ -1,10 +1,9 @@
 import React from "react"
-import { View, Button, StyleSheet, Text } from "react-native"
+import { View, Button, Text, Dimensions } from "react-native"
 
 import { PersonalData } from "../components/PersonalData"
 import { Classes } from "../components/Classes"
 
-import { useAuthContext } from "../contexts/AuthContext"
 import { useAppContext } from "../contexts/AppContext"
 import { useSubscribeTopics } from "../hooks/useSubscribeTopics"
 import { useNotificationsListener } from "../hooks/useNotificationsListener"
@@ -14,9 +13,10 @@ import type { AppStackParamList } from "../navigation/AppStack"
 
 type HomeScreenProps = NativeStackScreenProps<AppStackParamList, "Home">
 
+const { height: screenHeight } = Dimensions.get("window")
+
 export const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const accessToken = useAuthContext().accessToken as string
-  useSubscribeTopics(accessToken)
+  useSubscribeTopics()
   useNotificationsListener()
   const { hasNewNotification } = useAppContext()
 
@@ -26,21 +26,20 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   return (
     <View>
-      <PersonalData />
-      <Classes />
+      <View style={{ height: (screenHeight / 100) * 20 }}>
+        <PersonalData />
+      </View>
 
-      {hasNewNotification && <Text>Há notificações não visualizadas</Text>}
-      <View style={[styles.verticallySpaced]}>
-        <Button title="Notificações" onPress={handleNotifications} />
+      <View style={{ height: (screenHeight / 100) * 70 }}>
+        <Classes />
+      </View>
+
+      <View style={{ height: (screenHeight / 100) * 10 }}>
+        {hasNewNotification && <Text>Há notificações não visualizadas</Text>}
+        <View>
+          <Button title="Notificações" onPress={handleNotifications} />
+        </View>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch"
-  }
-})

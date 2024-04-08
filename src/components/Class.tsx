@@ -1,36 +1,43 @@
 import { Pressable, Text, StyleSheet } from "react-native"
 
+import { useAuthContext } from "../contexts/AuthContext"
 import { useNavigation } from "../hooks/useNavigation"
 
 import type { Class as IClass } from "../hooks/useClasses"
 
 interface ClassProps {
   groupClass: IClass
+  refetch: () => void
 }
 
-export const Class = ({ groupClass }: ClassProps) => {
+export const Class = ({ groupClass, refetch }: ClassProps) => {
+  const { isStaff } = useAuthContext()
+
   const { navigate } = useNavigation()
 
   const {
     subject,
+    group_name,
     teacher,
-    date,
     start_time,
-    end_time,
     location: { building, floor, classroom }
   } = groupClass
 
   const handleClass = () => {
-    navigate("App", { screen: "Class", params: { groupClass } })
+    navigate("App", { screen: "Class", params: { groupClass, refetch } })
   }
 
   return (
     <Pressable onPress={handleClass} style={styles.container}>
       <Text>Matéria: {subject}</Text>
-      <Text>Professor: {teacher}</Text>
-      <Text>Data: {date}</Text>
+
+      {isStaff ? (
+        <Text>Turma: {group_name}</Text>
+      ) : (
+        <Text>Professor: {teacher}</Text>
+      )}
+
       <Text>Início as: {start_time}</Text>
-      <Text>Término as: {end_time}</Text>
       <Text>Prédio: {building}</Text>
       <Text>Andar: {floor}</Text>
       <Text>Sala de aula: {classroom}</Text>

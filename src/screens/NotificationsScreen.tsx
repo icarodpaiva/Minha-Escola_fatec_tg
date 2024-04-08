@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { View, Text, ScrollView, StyleSheet } from "react-native"
+import { View, Text, ScrollView, StyleSheet, Button } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Loading } from "../components/Loading"
@@ -10,10 +10,9 @@ import { useAppContext } from "../contexts/AppContext"
 import { useNotifications } from "../hooks/useNotifications"
 
 export const NotificationsScreen = () => {
-  const accessToken = useAuthContext().accessToken as string
-  const { loadingNotifications, notifications } = useNotifications(accessToken)
-
+  const { isStaff } = useAuthContext()
   const { setHasNewNotification } = useAppContext()
+  const { loadingNotifications, notifications } = useNotifications()
 
   useEffect(() => {
     AsyncStorage.setItem("hasNewNotification", "false").then(() => {
@@ -28,6 +27,8 @@ export const NotificationsScreen = () => {
   if (!notifications?.length) {
     return (
       <View style={[styles.verticallySpaced, styles.mt20]}>
+        {isStaff && <Button title="Enviar nova notificação" />}
+
         <Text>Sem notificações</Text>
       </View>
     )
@@ -35,6 +36,8 @@ export const NotificationsScreen = () => {
 
   return (
     <ScrollView>
+      {isStaff && <Button title="Enviar nova notificação" />}
+
       {notifications.map(notification => (
         <Notification key={notification.id} notification={notification} />
       ))}

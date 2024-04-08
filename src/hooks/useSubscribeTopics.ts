@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react"
 import messaging from "@react-native-firebase/messaging"
 
-import { fetchData } from "../configs/api"
+import { useAuthContext } from "../contexts/AuthContext"
+import { getGroups } from "../api/getGroups"
 
-export const useSubscribeTopics = async (accessToken: string) => {
+export const useSubscribeTopics = async () => {
+  const { accessToken, isStaff } = useAuthContext()
+
   const [topics, setTopics] = useState<string[]>([])
 
   useEffect(() => {
-    const request = async () => {
-      const { data } = await fetchData(accessToken).get<number[]>("/topics")
+    // Staff doesn't subscribe to topics
+    if (isStaff) {
+      return
+    }
 
-      setTopics(data.map(String))
+    const request = async () => {
+      const data = await getGroups(accessToken)
+
+      setTopics(data.map(({ id }) => String(id)))
     }
 
     request()

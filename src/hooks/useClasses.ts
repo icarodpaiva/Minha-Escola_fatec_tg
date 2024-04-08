@@ -1,28 +1,37 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
+import { useAuthContext } from "../contexts/AuthContext"
 import { fetchData } from "../configs/api"
 
 export interface Class {
   id: number
-  subject: string
-  teacher: string | null
-  name: string
+  name: string | null
+  description: string | null
   date: string
   start_time: string
   end_time: string
-  location: {
-    building: string
-    floor: number
-    classroom: string
-  }
+  subject: string
+  group_name: string
+  teacher: string | null
+  location: Locations
 }
 
-export const useClasses = (
-  accessToken: string,
-  date: string = new Date().toISOString()
-) => {
+interface Locations {
+  building: string
+  floor: number
+  classroom: string
+}
+
+export const useClasses = (date: string = new Date().toISOString()) => {
+  const { accessToken } = useAuthContext()
+
   const [loadingClasses, setLoadingClasses] = useState(false)
   const [classes, setClasses] = useState<Class[] | null>(null)
+  const [refeches, setRefeches] = useState(0)
+
+  const refetch = useCallback(() => {
+    setRefeches(prevState => prevState + 1)
+  }, [])
 
   useEffect(() => {
     const request = async () => {
@@ -43,7 +52,7 @@ export const useClasses = (
     }
 
     request()
-  }, [date])
+  }, [date, refeches])
 
-  return { loadingClasses, classes }
+  return { loadingClasses, classes, refetch }
 }

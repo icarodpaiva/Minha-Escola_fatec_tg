@@ -14,12 +14,14 @@ import type { PropsWithChildren } from "react"
 interface AuthContextProps {
   loading: boolean
   accessToken: string | undefined
+  isStaff: boolean
   setAccessToken: (accessToken: string) => void
 }
 
 export const initialValue: AuthContextProps = {
   loading: true,
   accessToken: undefined,
+  isStaff: false,
   setAccessToken: () => {}
 }
 
@@ -42,16 +44,18 @@ export const AuthContextProvider = ({
 }: PropsWithChildren<AuthContextProps>) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [accessToken, setAccessToken] = useState<string>()
+  const [isStaff, setIsStaff] = useState(false)
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setAccessToken(session?.access_token)
+      setIsStaff(session?.user.user_metadata?.is_staff)
       setLoading(false)
     })
   }, [])
 
   const value = useMemo(
-    () => ({ loading, accessToken, setAccessToken }),
+    () => ({ loading, accessToken, isStaff, setAccessToken }),
     [loading, accessToken]
   )
 

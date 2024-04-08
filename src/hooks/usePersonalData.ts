@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react"
 
+import { useAuthContext } from "../contexts/AuthContext"
 import { fetchData } from "../configs/api"
 
 export interface PersonalData {
   id: number
   name: string
   email: string
-  sr: string
   document: string
-  course: string
-  semester: number
+
+  // Only students has the data below
+  sr?: string
+  course?: string
+  semester?: number
 }
 
-export const usePersonalData = (accessToken: string) => {
+export const usePersonalData = () => {
+  const { accessToken } = useAuthContext()
+
   const [loadingPersonalData, setLoadingPersonalData] = useState(false)
   const [personalData, setPersonalData] = useState<PersonalData | null>(null)
 

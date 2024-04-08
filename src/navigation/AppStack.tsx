@@ -15,7 +15,7 @@ import type { Class } from "../hooks/useClasses"
 export type AppStackParamList = {
   Home: undefined
   PersonalData: { personalData: PersonalData }
-  Class: { groupClass: Class }
+  Class: { groupClass: Class; refetch: () => void }
   Notifications: undefined
 }
 

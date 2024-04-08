@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 
+import { useAuthContext } from "../contexts/AuthContext"
 import { fetchData } from "../configs/api"
 
 export interface Notification {
@@ -7,11 +8,14 @@ export interface Notification {
   created_at: string
   title: string
   message: string
+  group_name: string
   subject: string
   author: string
 }
 
-export const useNotifications = (accessToken: string) => {
+export const useNotifications = () => {
+  const { accessToken } = useAuthContext()
+
   const [loadingNotifications, setLoadingNotifications] = useState(false)
   const [notifications, setNotifications] = useState<Notification[] | null>(
     null

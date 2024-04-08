@@ -3,13 +3,11 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Loading } from "./Loading"
 import { QRCode } from "./QRCode"
 
-import { useAuthContext } from "../contexts/AuthContext"
 import { usePersonalData } from "../hooks/usePersonalData"
 import { useNavigation } from "../hooks/useNavigation"
 
 export const PersonalData = () => {
-  const accessToken = useAuthContext().accessToken as string
-  const { loadingPersonalData, personalData } = usePersonalData(accessToken)
+  const { loadingPersonalData, personalData } = usePersonalData()
   const { navigate } = useNavigation()
 
   if (loadingPersonalData) {
@@ -24,7 +22,7 @@ export const PersonalData = () => {
     )
   }
 
-  const { name, email, sr } = personalData
+  const { name, email, sr, document } = personalData
 
   const handlePersonalData = () => {
     navigate("App", { screen: "PersonalData", params: { personalData } })
@@ -34,9 +32,9 @@ export const PersonalData = () => {
     <Pressable onPress={handlePersonalData} style={styles.container}>
       <Text>Nome: {name}</Text>
       <Text>E-mail: {email}</Text>
-      <Text>RA: {sr}</Text>
+      {sr && <Text>RA: {sr}</Text>}
 
-      <QRCode size={100} value={sr} />
+      <QRCode size={60} value={sr ?? document} />
     </Pressable>
   )
 }
