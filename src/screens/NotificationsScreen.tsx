@@ -8,11 +8,13 @@ import { Notification } from "../components/Notification"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useAppContext } from "../contexts/AppContext"
 import { useNotifications } from "../hooks/useNotifications"
+import { useNavigation } from "../hooks/useNavigation"
 
 export const NotificationsScreen = () => {
   const { isStaff } = useAuthContext()
   const { setHasNewNotification } = useAppContext()
-  const { loadingNotifications, notifications } = useNotifications()
+  const { loadingNotifications, notifications, refetch } = useNotifications()
+  const { navigate } = useNavigation()
 
   useEffect(() => {
     AsyncStorage.setItem("hasNewNotification", "false").then(() => {
@@ -34,9 +36,18 @@ export const NotificationsScreen = () => {
     )
   }
 
+  const handleCreateNotification = () => {
+    navigate("App", { screen: "CreateNotification", params: { refetch } })
+  }
+
   return (
     <ScrollView>
-      {isStaff && <Button title="Enviar nova notificação" />}
+      {isStaff && (
+        <Button
+          title="Enviar nova notificação"
+          onPress={handleCreateNotification}
+        />
+      )}
 
       {notifications.map(notification => (
         <Notification key={notification.id} notification={notification} />

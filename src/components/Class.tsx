@@ -12,7 +12,6 @@ interface ClassProps {
 
 export const Class = ({ groupClass, refetch }: ClassProps) => {
   const { isStaff } = useAuthContext()
-
   const { navigate } = useNavigation()
 
   const {

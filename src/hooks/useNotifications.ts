@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import { useAuthContext } from "../contexts/AuthContext"
 import { fetchData } from "../configs/api"
@@ -20,6 +20,11 @@ export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[] | null>(
     null
   )
+  const [refeches, setRefeches] = useState(0)
+
+  const refetch = useCallback(() => {
+    setRefeches(prevState => prevState + 1)
+  }, [])
 
   useEffect(() => {
     const request = async () => {
@@ -36,7 +41,7 @@ export const useNotifications = () => {
     }
 
     request()
-  }, [])
+  }, [refeches])
 
-  return { loadingNotifications, notifications }
+  return { loadingNotifications, notifications, refetch }
 }

@@ -4,7 +4,7 @@ import messaging from "@react-native-firebase/messaging"
 import { useAuthContext } from "../contexts/AuthContext"
 import { getGroups } from "../api/getGroups"
 
-export const useSubscribeTopics = async () => {
+export const useSubscribeTopics = () => {
   const { accessToken, isStaff } = useAuthContext()
 
   const [topics, setTopics] = useState<string[]>([])

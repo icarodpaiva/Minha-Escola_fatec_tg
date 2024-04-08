@@ -6,7 +6,8 @@ import {
   HomeScreen,
   PersonalDataScreen,
   ClassScreen,
-  NotificationsScreen
+  NotificationsScreen,
+  CreateNotificationScreen
 } from "../screens"
 
 import type { PersonalData } from "../hooks/usePersonalData"
@@ -17,6 +18,7 @@ export type AppStackParamList = {
   PersonalData: { personalData: PersonalData }
   Class: { groupClass: Class; refetch: () => void }
   Notifications: undefined
+  CreateNotification: { refetch: () => void }
 }
 
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
@@ -44,6 +46,11 @@ export const AppStack = () => {
           name="Notifications"
           component={NotificationsScreen}
           options={{ headerTitle: "Notificações" }}
+        />
+        <Screen
+          name="CreateNotification"
+          component={CreateNotificationScreen}
+          options={{ headerTitle: "Criar notificação" }}
         />
       </Navigator>
     </AppContextProvider>

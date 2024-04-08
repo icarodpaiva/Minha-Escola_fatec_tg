@@ -1,6 +1,6 @@
 import { fetchData } from "../configs/api"
 
-interface Group {
+export interface Group {
   id: number
   name: string
   subject: string
