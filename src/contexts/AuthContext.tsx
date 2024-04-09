@@ -15,14 +15,16 @@ interface AuthContextProps {
   loading: boolean
   accessToken: string | undefined
   isStaff: boolean
-  setAccessToken: (accessToken: string) => void
+  setAccessToken: (accessToken: string | undefined) => void
+  setIsStaff: (isStaff: boolean) => void
 }
 
 export const initialValue: AuthContextProps = {
   loading: true,
   accessToken: undefined,
   isStaff: false,
-  setAccessToken: () => {}
+  setAccessToken: () => {},
+  setIsStaff: () => {}
 }
 
 const AuthContext = createContext<AuthContextProps>(initialValue)
@@ -43,7 +45,7 @@ export const AuthContextProvider = ({
   children
 }: PropsWithChildren<AuthContextProps>) => {
   const [loading, setLoading] = useState<boolean>(true)
-  const [accessToken, setAccessToken] = useState<string>()
+  const [accessToken, setAccessToken] = useState<string | undefined>()
   const [isStaff, setIsStaff] = useState(false)
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export const AuthContextProvider = ({
   }, [])
 
   const value = useMemo(
-    () => ({ loading, accessToken, isStaff, setAccessToken }),
+    () => ({ loading, accessToken, isStaff, setAccessToken, setIsStaff }),
     [loading, accessToken]
   )
 
