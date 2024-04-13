@@ -11,7 +11,7 @@ export const useSubscribeTopics = () => {
 
   useEffect(() => {
     // Staff doesn't subscribe to topics
-    if (isStaff) {
+    if (isStaff === undefined || isStaff) {
       return
     }
 
@@ -22,7 +22,7 @@ export const useSubscribeTopics = () => {
     }
 
     request()
-  }, [])
+  }, [isStaff])
 
   useEffect(() => {
     topics.forEach(topic => {

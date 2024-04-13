@@ -2,35 +2,22 @@ import React, { useState } from "react"
 import { Alert, View, Button, TextInput, StyleSheet } from "react-native"
 
 import { supabase } from "../configs/supabase"
-import { useAuthContext } from "../contexts/AuthContext"
 
-import type { NativeStackScreenProps } from "@react-navigation/native-stack"
-import type { AuthStackParamList } from "../navigation/AuthStack"
-
-type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, "Login">
-
-export const LoginScreen = ({}: Readonly<LoginScreenProps>) => {
+export const LoginScreen = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const { setAccessToken, setIsStaff } = useAuthContext()
-
   async function signInWithEmail() {
     setLoading(true)
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password
     })
 
     if (error) {
       Alert.alert(error.message)
-    }
-
-    if (data) {
-      setAccessToken(data.session?.access_token)
-      setIsStaff(data.session?.user.user_metadata?.is_staff)
     }
 
     setLoading(false)

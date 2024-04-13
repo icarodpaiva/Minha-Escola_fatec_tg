@@ -12,19 +12,15 @@ import { supabase } from "../configs/supabase"
 import type { PropsWithChildren } from "react"
 
 interface AuthContextProps {
-  loading: boolean
   accessToken: string | undefined
-  isStaff: boolean
-  setAccessToken: (accessToken: string | undefined) => void
-  setIsStaff: (isStaff: boolean) => void
+  isStaff: boolean | undefined
+  loading: boolean
 }
 
 export const initialValue: AuthContextProps = {
-  loading: true,
   accessToken: undefined,
-  isStaff: false,
-  setAccessToken: () => {},
-  setIsStaff: () => {}
+  isStaff: undefined,
+  loading: true
 }
 
 const AuthContext = createContext<AuthContextProps>(initialValue)
@@ -44,9 +40,9 @@ AppState.addEventListener("change", state => {
 export const AuthContextProvider = ({
   children
 }: PropsWithChildren<AuthContextProps>) => {
+  const [accessToken, setAccessToken] = useState<string>()
+  const [isStaff, setIsStaff] = useState<boolean>()
   const [loading, setLoading] = useState<boolean>(true)
-  const [accessToken, setAccessToken] = useState<string | undefined>()
-  const [isStaff, setIsStaff] = useState(false)
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -57,8 +53,8 @@ export const AuthContextProvider = ({
   }, [])
 
   const value = useMemo(
-    () => ({ loading, accessToken, isStaff, setAccessToken, setIsStaff }),
-    [loading, accessToken]
+    () => ({ accessToken, isStaff, loading }),
+    [accessToken, isStaff, loading]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
