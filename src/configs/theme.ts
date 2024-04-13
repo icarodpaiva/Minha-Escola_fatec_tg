@@ -10,6 +10,10 @@ export const theme = {
 
   colors: {
     main: "#152259",
-    white: "#ffffff"
+    white: "#ffffff",
+    lightGray: "#fafafa",
+    gray: "#cccccc",
+    darkGray: "#666666",
+    darkestGray: "#333333"
   }
 }
