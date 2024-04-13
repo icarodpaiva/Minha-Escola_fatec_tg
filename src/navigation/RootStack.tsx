@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect } from "react"
+import SplashScreen from "react-native-splash-screen"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-import { Loading } from "../components/Loading"
 import { AuthStack } from "./AuthStack"
 import { AppStack } from "./AppStack"
 
@@ -22,9 +22,11 @@ const { Navigator, Screen } = createNativeStackNavigator<RootStackParamList>()
 export const RootStack = () => {
   const { loading, accessToken } = useAuthContext()
 
-  if (loading) {
-    return <Loading />
-  }
+  useEffect(() => {
+    if (!loading) {
+      SplashScreen.hide()
+    }
+  }, [loading])
 
   return (
     <NavigationContainer>
