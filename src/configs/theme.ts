@@ -14,6 +14,7 @@ export const theme = {
     lightGray: "#fafafa",
     gray: "#cccccc",
     darkGray: "#666666",
-    darkestGray: "#333333"
+    darkestGray: "#333333",
+    overlay: "#00000080"
   }
 }
