@@ -50,13 +50,15 @@ export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
         <Profile width={80} height={80} />
 
         <InfoText label="Nome" value={name} capitalize />
-        <InfoText label="E-mail" value={email} capitalize />
-        <InfoText label="CPF" value={document} capitalize />
-        <InfoText label="RA" value={sr} capitalize />
-        <InfoText label="Curso" value={course} capitalize />
-        <InfoText label="Semestre" value={semester} capitalize />
+        <InfoText label="E-mail" value={email} />
+        <InfoText label="CPF" value={document} />
+        <InfoText label="RA" value={sr} />
+        <InfoText label="Curso" value={course} />
+        <InfoText label="Semestre" value={`${semester}º`} />
 
-        <QRCode value={sr ?? document} size={width - 32} />
+        <View style={styles.qrCodeContainer}>
+          <QRCode value={sr ?? document} size={width - 32} quietZone={16} />
+        </View>
       </ScrollView>
 
       <Pressable onPress={handleLogout} style={styles.button}>
@@ -73,6 +75,9 @@ const styles = StyleSheet.create({
   },
   infosContainer: {
     flex: 1
+  },
+  qrCodeContainer: {
+    marginTop: 8
   },
   button: {
     borderRadius: 48,

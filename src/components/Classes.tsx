@@ -15,29 +15,23 @@ export const Classes = () => {
 
   const { loadingClasses, classes, refetch } = useClasses(date)
 
-  if (loadingClasses) {
-    return <Loading />
-  }
-
   return (
     <View style={styles.container}>
       <DatePicker date={date} setDate={setDate} />
 
-      <ScrollView style={styles.classesContainer}>
-        {!classes || classes.length === 0 ? (
-          <Text>Sem aulas para o dia {formatDate(date)}</Text>
-        ) : (
-          <>
-            {classes.map(groupClass => (
-              <Class
-                key={groupClass.id}
-                groupClass={groupClass}
-                refetch={refetch}
-              />
-            ))}
-          </>
-        )}
-      </ScrollView>
+      {loadingClasses && <Loading />}
+
+      {!loadingClasses && classes && classes.length > 0 && (
+        <ScrollView style={styles.classesContainer}>
+          {classes.map(groupClass => (
+            <Class
+              key={groupClass.id}
+              groupClass={groupClass}
+              refetch={refetch}
+            />
+          ))}
+        </ScrollView>
+      )}
     </View>
   )
 }
