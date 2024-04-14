@@ -18,7 +18,10 @@ export const Classes = () => {
     return <Loading />
   }
 
-  const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
+  const dateObj = new Date(date)
+  dateObj.setDate(dateObj.getDate() + 1)
+
+  const formattedDate = dateObj.toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric"

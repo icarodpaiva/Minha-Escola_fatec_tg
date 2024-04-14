@@ -21,7 +21,10 @@ interface DatePickerProps {
 export const DatePicker = ({ date, setDate }: DatePickerProps) => {
   const [isVisible, setIsVisible] = useState(false)
 
-  const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
+  const dateObj = new Date(date)
+  dateObj.setDate(dateObj.getDate() + 1)
+
+  const formattedDate = dateObj.toLocaleDateString("pt-BR", {
     weekday: "long",
     day: "2-digit",
     month: "2-digit",
