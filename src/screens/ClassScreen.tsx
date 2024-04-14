@@ -1,7 +1,9 @@
 import React, { useState } from "react"
-import { ScrollView, TextInput, Button, StyleSheet } from "react-native"
+import { View, ScrollView, Text, TextInput, StyleSheet } from "react-native"
 
+import { Modal } from "../components/Modal"
 import { InfoText } from "../components/InfoText"
+import { Button } from "../components/Button"
 
 import { theme } from "../configs/theme"
 import { useAuthContext } from "../contexts/AuthContext"
@@ -10,7 +12,6 @@ import { formatDate } from "../utils/formatDate"
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { AppStackParamList } from "../navigation/AppStack"
-
 type ClassScreenProps = NativeStackScreenProps<AppStackParamList, "Class">
 
 const { colors, sizes } = theme
@@ -41,8 +42,16 @@ export const ClassScreen = ({ route }: ClassScreenProps) => {
     setIsEditing(prevState => !prevState)
   }
 
+  const handleCancelEdit = () => {
+    setClassTitle(name ?? "")
+    setClassDescription(description ?? "")
+    setIsEditing(false)
+  }
+
   const handleEdit = async () => {
     try {
+      setIsEditing(false)
+
       await updateClassDetails(
         id,
         { name: classTitle, description: classDescription },
@@ -52,58 +61,68 @@ export const ClassScreen = ({ route }: ClassScreenProps) => {
     } catch {
       setClassTitle(name ?? "")
       setClassDescription(description ?? "")
-    } finally {
-      setIsEditing(false)
     }
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {!isEditing ? (
-        <>
-          <InfoText label="Tema da aula" value={name} />
-          <InfoText label="Descrição" value={description} />
-        </>
-      ) : (
-        <>
-          <TextInput
-            value={classTitle}
-            onChangeText={setClassTitle}
-            placeholder="Definir tema da aula"
-            autoCapitalize="sentences"
-          />
-          <TextInput
-            value={classDescription}
-            onChangeText={setClassDescription}
-            placeholder="Definir descrição da aula"
-            autoCapitalize="sentences"
-          />
-
-          <Button title="Cancelar" onPress={handleToggleEdit} />
-          <Button title="Confirmar alterações" onPress={handleEdit} />
-        </>
-      )}
+    <View style={styles.container}>
+      <ScrollView style={styles.infosContainer}>
+        <InfoText label="Tema da aula" value={classTitle} />
+        <InfoText label="Descrição" value={classDescription} />
+        <InfoText label="Matéria" value={subject} />
+        <InfoText
+          label={isStaff ? "Turma:" : "Professor"}
+          value={isStaff ? group_name : teacher}
+          capitalize
+        />
+        <InfoText label="Data" value={formatDate(date, true)} capitalize />
+        <InfoText label="Início as" value={start_time} />
+        <InfoText label="Término as" value={end_time} />
+        <InfoText label="Sala de aula" value={classroom} />
+        <InfoText
+          label="Andar"
+          value={floor > 0 ? `${floor}º Andar` : "Térreo"}
+        />
+        <InfoText label="Prédio" value={building} />
+      </ScrollView>
 
       {isStaff && (
-        <Button title="Editar detalhes de aula" onPress={handleToggleEdit} />
+        <Button text="Editar detalhes de aula" onPress={handleToggleEdit} />
       )}
 
-      <InfoText label="Matéria" value={subject} />
-      <InfoText
-        label={isStaff ? "Turma:" : "Professor"}
-        value={isStaff ? group_name : teacher}
-        capitalize
-      />
-      <InfoText label="Data" value={formatDate(date, true)} capitalize />
-      <InfoText label="Início as" value={start_time} />
-      <InfoText label="Término as" value={end_time} />
-      <InfoText label="Sala de aula" value={classroom} />
-      <InfoText
-        label="Andar"
-        value={floor > 0 ? `${floor}º Andar` : "Térreo"}
-      />
-      <InfoText label="Prédio" value={building} />
-    </ScrollView>
+      <Modal
+        visible={Boolean(isStaff && isEditing)}
+        onCancel={handleCancelEdit}
+        title="Editar detalhes de aula"
+      >
+        <Text style={styles.inputLabel}>Tema da aula:</Text>
+        <TextInput
+          value={classTitle}
+          onChangeText={setClassTitle}
+          placeholder="Tema da aula"
+          placeholderTextColor={colors.darkGray}
+          autoCapitalize="sentences"
+          style={styles.input}
+        />
+
+        <Text style={styles.inputLabel}>Descrição:</Text>
+        <TextInput
+          value={classDescription}
+          onChangeText={setClassDescription}
+          placeholder="Descrição"
+          placeholderTextColor={colors.darkGray}
+          multiline={true}
+          numberOfLines={3}
+          autoCapitalize="sentences"
+          style={styles.input}
+        />
+
+        <View style={styles.editButtonsContainer}>
+          <Button text="Cancelar" onPress={handleCancelEdit} />
+          <Button text="Confirmar" onPress={handleEdit} />
+        </View>
+      </Modal>
+    </View>
   )
 }
 
@@ -112,16 +131,28 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16
   },
-  info: {
-    marginTop: 8,
-    color: colors.darkGray,
+  infosContainer: {
+    flex: 1,
+    marginBottom: 16
+  },
+  inputLabel: {
+    marginBottom: 2,
+    fontSize: sizes.medium,
+    color: colors.darkestGray
+  },
+  input: {
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.gray,
+    borderRadius: 8,
+    padding: 8,
+    backgroundColor: colors.white,
+    color: colors.darkestGray,
     fontSize: sizes.medium
   },
-  infoValue: {
-    color: colors.darkestGray,
-    fontSize: sizes.large
-  },
-  capitalize: {
-    textTransform: "capitalize"
+  editButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   }
 })

@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { View, Pressable, Text, Modal, StyleSheet } from "react-native"
+import { View, Pressable, Text, StyleSheet } from "react-native"
 import { Calendar } from "react-native-calendars"
 
+import { Modal } from "./Modal"
 import Calender from "../assets/svgs/calender.svg"
-import Close from "../assets/svgs/close.svg"
 
 import { calenderLocale } from "../configs/calenderLocale"
 import { theme } from "../configs/theme"
@@ -40,38 +40,24 @@ export const DatePicker = ({ date, setDate }: DatePickerProps) => {
 
       <Modal
         visible={isVisible}
-        onRequestClose={handleToggleDatePicker}
-        transparent
+        onCancel={handleToggleDatePicker}
+        title="Selecione o dia"
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalHeaderTitle}>Selecione o dia</Text>
-              <Pressable
-                onPress={handleToggleDatePicker}
-                style={styles.modalHeaderClose}
-              >
-                <Close width={24} height={24} />
-              </Pressable>
-            </View>
-
-            <Calendar
-              onDayPress={handleSelectDate}
-              markedDates={{ [date]: { selected: true } }}
-              theme={{
-                arrowColor: colors.main,
-                monthTextColor: colors.darkestGray,
-                textMonthFontSize: sizes.large,
-                dayTextColor: colors.darkestGray,
-                textDayFontSize: sizes.large,
-                textInactiveColor: colors.gray,
-                selectedDayTextColor: colors.white,
-                selectedDayBackgroundColor: colors.main,
-                todayTextColor: colors.darkestGray
-              }}
-            />
-          </View>
-        </View>
+        <Calendar
+          onDayPress={handleSelectDate}
+          markedDates={{ [date]: { selected: true } }}
+          theme={{
+            arrowColor: colors.main,
+            monthTextColor: colors.darkestGray,
+            textMonthFontSize: sizes.large,
+            dayTextColor: colors.darkestGray,
+            textDayFontSize: sizes.large,
+            textInactiveColor: colors.gray,
+            selectedDayTextColor: colors.white,
+            selectedDayBackgroundColor: colors.main,
+            todayTextColor: colors.darkestGray
+          }}
+        />
       </Modal>
     </View>
   )
@@ -92,29 +78,5 @@ const styles = StyleSheet.create({
     color: colors.darkestGray,
     fontSize: sizes.medium,
     textTransform: "capitalize"
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.overlay
-  },
-  modalContent: {
-    borderRadius: 16,
-    padding: 16,
-    backgroundColor: colors.white
-  },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  modalHeaderTitle: {
-    color: colors.darkestGray,
-    fontSize: sizes.large,
-    paddingBottom: 8
-  },
-  modalHeaderClose: {
-    paddingBottom: 8
   }
 })

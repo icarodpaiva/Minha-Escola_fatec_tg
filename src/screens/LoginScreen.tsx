@@ -1,7 +1,8 @@
 import React, { useState } from "react"
-import { View, Text, TextInput, Pressable, StyleSheet } from "react-native"
+import { View, Text, TextInput, StyleSheet } from "react-native"
 import { ALERT_TYPE, Dialog } from "react-native-alert-notification"
 
+import { Button } from "../components/Button"
 import Logo from "../assets/svgs/logo.svg"
 
 import { supabase } from "../configs/supabase"
@@ -81,9 +82,7 @@ export const LoginScreen = () => {
           />
         </View>
 
-        <Pressable disabled={loading} onPress={signIn} style={styles.button}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </Pressable>
+        <Button text="Entrar" onPress={signIn} disabled={loading} />
       </View>
     </View>
   )
@@ -120,15 +119,5 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: colors.white,
     color: colors.darkestGray
-  },
-  button: {
-    borderRadius: 48,
-    padding: 8,
-    backgroundColor: colors.main
-  },
-  buttonText: {
-    color: colors.white,
-    fontSize: sizes.medium,
-    textAlign: "center"
   }
 })
