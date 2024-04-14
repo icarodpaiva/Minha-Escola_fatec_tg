@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
+import QRCode from "react-native-qrcode-svg"
 
 import { Loading } from "./Loading"
-import { QRCode } from "./QRCode"
 
 import Profile from "../assets/svgs/profile.svg"
 

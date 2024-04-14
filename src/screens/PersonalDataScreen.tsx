@@ -1,9 +1,21 @@
 import React, { useState } from "react"
-import { Alert, View, Button, StyleSheet, Text } from "react-native"
+import {
+  View,
+  ScrollView,
+  Text,
+  Dimensions,
+  Pressable,
+  StyleSheet
+} from "react-native"
+import QRCode from "react-native-qrcode-svg"
 
+import Profile from "../assets/svgs/profile.svg"
+
+import { theme } from "../configs/theme"
 import { supabase } from "../configs/supabase"
+
 import { Loading } from "../components/Loading"
-import { QRCode } from "../components/QRCode"
+import { InfoText } from "../components/InfoText"
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { AppStackParamList } from "../navigation/AppStack"
@@ -13,18 +25,15 @@ type PersonalDataScreenProps = NativeStackScreenProps<
   "PersonalData"
 >
 
+const { width } = Dimensions.get("window")
+const { colors, sizes } = theme
+
 export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
   const [loading, setLoading] = useState(false)
 
   const handleLogout = async () => {
     setLoading(true)
-
-    const { error } = await supabase.auth.signOut()
-
-    if (error) {
-      Alert.alert(error.message)
-    }
-
+    await supabase.auth.signOut()
     setLoading(false)
   }
 
@@ -32,31 +41,48 @@ export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
     return <Loading />
   }
 
-  const { name, email, sr, document, course, semester } =
+  const { name, email, document, sr, course, semester } =
     route.params.personalData
 
   return (
-    <>
-      <Text>Nome: {name}</Text>
-      <Text>E-mail: {email}</Text>
-      <Text>CPF: {document}</Text>
-      {sr && <Text>RA: {sr}</Text>}
-      {course && <Text>Curso: {course}</Text>}
-      {semester && <Text>Semestre: {semester}</Text>}
+    <View style={styles.container}>
+      <ScrollView style={styles.infosContainer}>
+        <Profile width={80} height={80} />
 
-      <QRCode size={350} value={sr ?? document} />
+        <InfoText label="Nome" value={name} capitalize />
+        <InfoText label="E-mail" value={email} capitalize />
+        <InfoText label="CPF" value={document} capitalize />
+        <InfoText label="RA" value={sr} capitalize />
+        <InfoText label="Curso" value={course} capitalize />
+        <InfoText label="Semestre" value={semester} capitalize />
 
-      <View style={[styles.verticallySpaced]}>
-        <Button title="Sair" onPress={handleLogout} />
-      </View>
-    </>
+        <QRCode value={sr ?? document} size={width - 32} />
+      </ScrollView>
+
+      <Pressable onPress={handleLogout} style={styles.button}>
+        <Text style={styles.buttonText}>Sair da conta</Text>
+      </Pressable>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch"
+  container: {
+    flex: 1,
+    padding: 16
+  },
+  infosContainer: {
+    flex: 1
+  },
+  button: {
+    borderRadius: 48,
+    marginTop: 16,
+    padding: 8,
+    backgroundColor: colors.main
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: sizes.medium,
+    textAlign: "center"
   }
 })

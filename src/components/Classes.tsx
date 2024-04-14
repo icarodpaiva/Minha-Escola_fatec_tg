@@ -6,6 +6,7 @@ import { DatePicker } from "./DatePicker"
 import { Class } from "./Class"
 
 import { useClasses } from "../hooks/useClasses"
+import { formatDate } from "../utils/formatDate"
 
 const initialDate = new Date().toISOString().replace(/T.*/, "")
 
@@ -18,19 +19,13 @@ export const Classes = () => {
     return <Loading />
   }
 
-  const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  })
-
   return (
     <View style={styles.container}>
       <DatePicker date={date} setDate={setDate} />
 
       <ScrollView style={styles.classesContainer}>
-        {!classes?.length ? (
-          <Text>Sem aulas para o dia {formattedDate}</Text>
+        {!classes || classes.length === 0 ? (
+          <Text>Sem aulas para o dia {formatDate(date)}</Text>
         ) : (
           <>
             {classes.map(groupClass => (

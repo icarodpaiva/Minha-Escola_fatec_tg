@@ -7,6 +7,7 @@ import Close from "../assets/svgs/close.svg"
 
 import { calenderLocale } from "../configs/calenderLocale"
 import { theme } from "../configs/theme"
+import { formatDate } from "../utils/formatDate"
 
 import type { DateData } from "react-native-calendars"
 
@@ -21,13 +22,6 @@ interface DatePickerProps {
 export const DatePicker = ({ date, setDate }: DatePickerProps) => {
   const [isVisible, setIsVisible] = useState(false)
 
-  const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  })
-
   const handleToggleDatePicker = () => {
     setIsVisible(prevState => !prevState)
   }
@@ -40,7 +34,7 @@ export const DatePicker = ({ date, setDate }: DatePickerProps) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={handleToggleDatePicker} style={styles.dateContainer}>
-        <Text style={styles.date}>{formattedDate}</Text>
+        <Text style={styles.date}>{formatDate(date, true)}</Text>
         <Calender width={32} height={32} />
       </Pressable>
 

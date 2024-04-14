@@ -1,6 +1,10 @@
-import { Text, View, StyleSheet } from "react-native"
+import { View, StyleSheet } from "react-native"
 
+import { InfoText } from "./InfoText"
+
+import { theme } from "../configs/theme"
 import { useAuthContext } from "../contexts/AuthContext"
+import { formatDate } from "../utils/formatDate"
 
 import type { Notification as INotification } from "../hooks/useNotifications"
 
@@ -16,21 +20,28 @@ export const Notification = ({ notification }: NotificationProps) => {
 
   return (
     <View style={styles.container}>
-      <Text>Matéria: {subject}</Text>
-      {isStaff ? (
-        <Text>Turma: {group_name}</Text>
-      ) : (
-        <Text>Enviado por: {author}</Text>
-      )}
-      <Text>Data: {created_at}</Text>
-      <Text>Título: {title}</Text>
-      <Text>Mensagem: {message}</Text>
+      <InfoText label="Matéria" value={subject} />
+      <InfoText
+        label={isStaff ? "Turma" : "Enviado por"}
+        value={isStaff ? group_name : author}
+        capitalize
+      />
+      <InfoText
+        label="Data"
+        value={formatDate(created_at, true, true)}
+        capitalize
+      />
+      <InfoText label="Título" value={title} />
+      <InfoText label="Mensagem" value={message} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.main,
+    marginVertical: 1,
+    paddingVertical: 8
   }
 })

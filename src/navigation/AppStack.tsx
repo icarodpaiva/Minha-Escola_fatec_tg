@@ -10,6 +10,7 @@ import {
   CreateNotificationScreen
 } from "../screens"
 
+import { theme } from "../configs/theme"
 import type { PersonalData } from "../hooks/usePersonalData"
 import type { Class } from "../hooks/useClasses"
 
@@ -23,10 +24,19 @@ export type AppStackParamList = {
 
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
 
+const { colors } = theme
+
 export const AppStack = () => {
   return (
     <AppContextProvider {...initialValue}>
-      <Navigator>
+      <Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: colors.main },
+          headerTitleStyle: { color: colors.white },
+          headerTintColor: colors.white,
+          headerTitleAlign: "center"
+        }}
+      >
         <Screen
           name="Home"
           component={HomeScreen}

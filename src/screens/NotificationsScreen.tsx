@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { View, Text, ScrollView, StyleSheet, Button } from "react-native"
+import { ScrollView, Button, Text, StyleSheet } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Loading } from "../components/Loading"
@@ -26,22 +26,12 @@ export const NotificationsScreen = () => {
     return <Loading />
   }
 
-  if (!notifications?.length) {
-    return (
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        {isStaff && <Button title="Enviar nova notificação" />}
-
-        <Text>Sem notificações</Text>
-      </View>
-    )
-  }
-
   const handleCreateNotification = () => {
     navigate("App", { screen: "CreateNotification", params: { refetch } })
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       {isStaff && (
         <Button
           title="Enviar nova notificação"
@@ -49,20 +39,24 @@ export const NotificationsScreen = () => {
         />
       )}
 
-      {notifications.map(notification => (
-        <Notification key={notification.id} notification={notification} />
-      ))}
+      {!notifications || notifications.length === 0 ? (
+        <Text>Sem notificações</Text>
+      ) : (
+        <>
+          {notifications.map(notification => (
+            <Notification key={notification.id} notification={notification} />
+          ))}
+        </>
+      )}
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch"
-  },
-  mt20: {
-    marginTop: 20
+  container: {
+    flex: 1,
+    marginTop: 8,
+    marginBottom: 16,
+    paddingHorizontal: 16
   }
 })
