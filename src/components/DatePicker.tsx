@@ -28,29 +28,33 @@ export const DatePicker = ({ date, setDate }: DatePickerProps) => {
     year: "numeric"
   })
 
-  const showDatePicker = () => {
-    setIsVisible(true)
+  const handleToggleDatePicker = () => {
+    setIsVisible(prevState => !prevState)
   }
 
   const handleSelectDate = (date: DateData) => {
     setDate(date.dateString)
-    setIsVisible(false)
+    handleToggleDatePicker()
   }
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={showDatePicker} style={styles.dateContainer}>
+      <Pressable onPress={handleToggleDatePicker} style={styles.dateContainer}>
         <Text style={styles.date}>{formattedDate}</Text>
         <Calender width={32} height={32} />
       </Pressable>
 
-      <Modal visible={isVisible} transparent>
+      <Modal
+        visible={isVisible}
+        onRequestClose={handleToggleDatePicker}
+        transparent
+      >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalHeaderTitle}>Selecione a Data</Text>
+              <Text style={styles.modalHeaderTitle}>Selecione o dia</Text>
               <Pressable
-                onPress={() => setIsVisible(false)}
+                onPress={handleToggleDatePicker}
                 style={styles.modalHeaderClose}
               >
                 <Close width={24} height={24} />
@@ -63,10 +67,9 @@ export const DatePicker = ({ date, setDate }: DatePickerProps) => {
               theme={{
                 arrowColor: colors.main,
                 monthTextColor: colors.darkestGray,
-                textMonthFontSize: sizes.small,
-                weekVerticalMargin: 0,
+                textMonthFontSize: sizes.large,
                 dayTextColor: colors.darkestGray,
-                textDayFontSize: sizes.small,
+                textDayFontSize: sizes.large,
                 textInactiveColor: colors.gray,
                 selectedDayTextColor: colors.white,
                 selectedDayBackgroundColor: colors.main,
@@ -82,8 +85,9 @@ export const DatePicker = ({ date, setDate }: DatePickerProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingVertical: 16
+    borderBottomWidth: 1,
+    borderBottomColor: colors.main,
+    paddingVertical: 8
   },
   dateContainer: {
     flexDirection: "row",
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
   },
   modalHeaderTitle: {
     color: colors.darkestGray,
-    fontSize: sizes.small,
+    fontSize: sizes.large,
     paddingBottom: 8
   },
   modalHeaderClose: {

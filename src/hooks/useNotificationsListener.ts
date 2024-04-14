@@ -1,7 +1,8 @@
 import { useEffect } from "react"
-import { PermissionsAndroid, Platform, Alert } from "react-native"
+import { PermissionsAndroid, Platform } from "react-native"
 import messaging from "@react-native-firebase/messaging"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import { useAppContext } from "../contexts/AppContext"
 import { useNavigation } from "./useNavigation"
@@ -30,33 +31,37 @@ const requestUserPermission = async () => {
   }
 }
 
-const quitStateNotification = async (callback: () => void) => {
+const quitStateNotification = async (navigateToNotifications: () => void) => {
   const remoteMessage = await messaging().getInitialNotification()
 
   if (remoteMessage) {
-    callback()
+    navigateToNotifications()
   }
 }
 
-const backgroundNotification = (callback: () => void) => {
+const backgroundNotification = (navigateToNotifications: () => void) => {
   messaging().onNotificationOpenedApp(_remoteMessage => {
-    callback()
+    navigateToNotifications()
   })
 }
 
-const foregroundNotification = (callback: () => Promise<void>) => {
+const foregroundNotification = (
+  newNotification: () => Promise<void>,
+  navigateToNotifications: () => void
+) => {
   return messaging().onMessage(async remoteMessage => {
     if (remoteMessage.notification) {
-      await callback()
+      await newNotification()
 
       const { title, body: message } = remoteMessage.notification
 
-      Alert.alert(
-        JSON.stringify({
-          title,
-          message
-        })
-      )
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title,
+        textBody: message,
+        onPress: navigateToNotifications,
+        autoClose: true
+      })
     }
   })
 }
@@ -78,7 +83,10 @@ export const useNotificationsListener = () => {
     requestUserPermission()
     quitStateNotification(navigateToNotifications)
     backgroundNotification(navigateToNotifications)
-    const unsubscribe = foregroundNotification(newNotification)
+    const unsubscribe = foregroundNotification(
+      newNotification,
+      navigateToNotifications
+    )
 
     return unsubscribe
   }, [])
