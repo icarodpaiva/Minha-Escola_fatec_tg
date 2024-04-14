@@ -71,7 +71,7 @@ export const ClassScreen = ({ route }: ClassScreenProps) => {
         <InfoText label="Descrição" value={classDescription} />
         <InfoText label="Matéria" value={subject} />
         <InfoText
-          label={isStaff ? "Turma:" : "Professor"}
+          label={isStaff ? "Turma" : "Professor"}
           value={isStaff ? group_name : teacher}
           capitalize
         />
