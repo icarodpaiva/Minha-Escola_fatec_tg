@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
 
-import { useAuthContext } from "../contexts/AuthContext"
 import { fetchData } from "../configs/api"
+import { supabase } from "../configs/supabase"
+import { useAuthContext } from "../contexts/AuthContext"
+import { Toast, ALERT_TYPE } from "react-native-alert-notification"
 
 export interface PersonalData {
   id: number
@@ -29,7 +31,13 @@ export const usePersonalData = () => {
         const { data } = await fetchData(accessToken).get("/profile")
         setPersonalData(data)
       } catch {
-        setPersonalData(null)
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          textBody: "Falha ao carregar dados do usuário, tente novamente",
+          autoClose: true
+        })
+
+        await supabase.auth.signOut()
       } finally {
         setLoadingPersonalData(false)
       }

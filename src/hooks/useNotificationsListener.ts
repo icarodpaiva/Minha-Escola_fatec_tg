@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { PermissionsAndroid, Platform } from "react-native"
 import messaging from "@react-native-firebase/messaging"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { ALERT_TYPE, Toast } from "react-native-alert-notification"
+import { Toast, ALERT_TYPE } from "react-native-alert-notification"
 
 import { useAppContext } from "../contexts/AppContext"
 import { useNavigation } from "./useNavigation"

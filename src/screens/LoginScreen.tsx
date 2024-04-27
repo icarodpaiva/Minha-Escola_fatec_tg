@@ -52,11 +52,12 @@ export const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Minha Escola</Text>
       <Logo />
 
       <View style={styles.formContainer}>
         <View style={styles.sectionContainer}>
-          <Text>Entrar</Text>
+          <Text style={styles.formTitle}>Entrar</Text>
         </View>
 
         <View style={styles.sectionContainer}>
@@ -74,6 +75,7 @@ export const LoginScreen = () => {
           <TextInput
             value={password}
             onChangeText={setPassword}
+            onSubmitEditing={signIn}
             placeholder="Senha"
             placeholderTextColor={colors.darkGray}
             secureTextEntry
@@ -96,6 +98,12 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: colors.main
   },
+  title: {
+    marginBottom: 6,
+    color: colors.white,
+    fontSize: sizes.xLarge,
+    textTransform: "uppercase"
+  },
   formContainer: {
     width: "100%",
     marginTop: 24,
@@ -107,8 +115,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 16
   },
-  title: {
-    marginBottom: 24,
+  formTitle: {
     color: colors.darkestGray,
     fontSize: sizes.medium
   },
