@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     marginBottom: 2,
     fontSize: sizes.medium,
+    lineHeight: sizes.medium,
     color: colors.darkestGray
   },
   input: {
@@ -148,7 +149,8 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: colors.white,
     color: colors.darkestGray,
-    fontSize: sizes.medium
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium
   },
   editButtonsContainer: {
     flexDirection: "row",

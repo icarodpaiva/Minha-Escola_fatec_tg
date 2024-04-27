@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: colors.white,
     fontSize: sizes.xLarge,
+    lineHeight: sizes.xLarge,
     textTransform: "uppercase"
   },
   formContainer: {
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     color: colors.darkestGray,
-    fontSize: sizes.medium
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium
   },
   input: {
     borderWidth: 1,

@@ -1,4 +1,5 @@
 import { Pressable, Text, View, StyleSheet } from "react-native"
+import SkeletonPlaceholder from "react-native-skeleton-placeholder"
 
 import { theme } from "../configs/theme"
 import { useAuthContext } from "../contexts/AuthContext"
@@ -48,6 +49,39 @@ export const Class = ({ groupClass, refetch }: ClassProps) => {
   )
 }
 
+export const ClassSkeleton = () => {
+  return (
+    <SkeletonPlaceholder backgroundColor={colors.gray}>
+      <SkeletonPlaceholder.Item style={styles.container}>
+        <SkeletonPlaceholder.Item
+          height={styles.subject.lineHeight}
+          marginRight={styles.info.marginRight}
+          marginBottom={styles.subject.marginBottom}
+        />
+
+        <SkeletonPlaceholder.Item style={styles.infosContainer}>
+          <SkeletonPlaceholder.Item
+            flex={1}
+            height={styles.info.lineHeight}
+            marginRight={styles.info.marginRight}
+          />
+
+          <SkeletonPlaceholder.Item
+            width={50}
+            height={styles.info.lineHeight}
+            marginRight={styles.info.marginRight}
+          />
+        </SkeletonPlaceholder.Item>
+
+        <SkeletonPlaceholder.Item
+          height={styles.info.lineHeight}
+          marginRight={styles.info.marginRight}
+        />
+      </SkeletonPlaceholder.Item>
+    </SkeletonPlaceholder>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     borderBottomWidth: 1,
@@ -56,20 +90,22 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   subject: {
-    marginBottom: 8,
+    marginBottom: 10,
     color: colors.darkestGray,
-    fontSize: sizes.medium
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium
   },
   infosContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 10
   },
   info: {
     marginRight: 10,
     color: colors.darkGray,
-    fontSize: sizes.small
+    fontSize: sizes.small,
+    lineHeight: sizes.small
   },
   capitalize: {
     textTransform: "capitalize"

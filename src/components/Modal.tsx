@@ -63,9 +63,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   headerTitle: {
+    paddingBottom: 8,
     color: colors.darkestGray,
     fontSize: sizes.large,
-    paddingBottom: 8
+    lineHeight: sizes.large
   },
   headerClose: {
     paddingBottom: 8

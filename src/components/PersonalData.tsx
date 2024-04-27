@@ -57,16 +57,16 @@ const PersonalDataSkeleton = () => {
         <SkeletonPlaceholder.Item width={40} height={40} borderRadius={40} />
 
         <SkeletonPlaceholder.Item style={styles.dataContainer}>
-          <SkeletonPlaceholder.Item height={styles.name.fontSize} />
+          <SkeletonPlaceholder.Item height={styles.name.lineHeight} />
 
           <SkeletonPlaceholder.Item
-            height={styles.info.fontSize}
+            height={styles.info.lineHeight}
             marginTop={styles.info.marginTop}
           />
 
           {!isStaff && (
             <SkeletonPlaceholder.Item
-              height={styles.info.fontSize}
+              height={styles.info.lineHeight}
               marginTop={styles.info.marginTop}
             />
           )}
@@ -92,11 +92,13 @@ const styles = StyleSheet.create({
   name: {
     color: colors.darkestGray,
     fontSize: sizes.medium,
+    lineHeight: sizes.medium,
     textTransform: "capitalize"
   },
   info: {
     marginTop: 6,
     color: colors.darkGray,
-    fontSize: sizes.small
+    fontSize: sizes.small,
+    lineHeight: sizes.small
   }
 })

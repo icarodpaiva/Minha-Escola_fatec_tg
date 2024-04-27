@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   text: {
     color: colors.white,
     fontSize: sizes.medium,
+    lineHeight: sizes.medium,
     textAlign: "center"
   }
 })

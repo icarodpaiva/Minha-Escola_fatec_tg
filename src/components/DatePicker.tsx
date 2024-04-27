@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   date: {
     color: colors.darkestGray,
     fontSize: sizes.medium,
+    lineHeight: sizes.medium,
     textTransform: "capitalize"
   }
 })

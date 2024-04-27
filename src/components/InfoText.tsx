@@ -29,11 +29,13 @@ const styles = StyleSheet.create({
   info: {
     marginTop: 8,
     color: colors.darkGray,
-    fontSize: sizes.medium
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium
   },
   infoValue: {
     color: colors.darkestGray,
-    fontSize: sizes.large
+    fontSize: sizes.large,
+    lineHeight: sizes.large
   },
   capitalize: {
     textTransform: "capitalize"

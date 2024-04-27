@@ -1,14 +1,16 @@
 import { useState } from "react"
-import { View, ScrollView, Text, StyleSheet } from "react-native"
+import { View, ScrollView, StyleSheet } from "react-native"
 
-import { Loading } from "./Loading"
 import { DatePicker } from "./DatePicker"
-import { Class } from "./Class"
+import { Class, ClassSkeleton } from "./Class"
 
 import { useClasses } from "../hooks/useClasses"
-import { formatDate } from "../utils/formatDate"
 
-const initialDate = new Date().toISOString().replace(/T.*/, "")
+const currentDate = new Date()
+const currentHours = currentDate.getHours()
+currentDate.setHours(currentHours < 3 ? currentHours - 12 : currentHours)
+
+const initialDate = currentDate.toISOString()
 
 export const Classes = () => {
   const [date, setDate] = useState(initialDate)
@@ -19,19 +21,21 @@ export const Classes = () => {
     <View style={styles.container}>
       <DatePicker date={date} setDate={setDate} />
 
-      {loadingClasses && <Loading />}
+      <ScrollView style={styles.classesContainer}>
+        {loadingClasses &&
+          Array.from({ length: 3 }).map((_, index) => (
+            <ClassSkeleton key={index} />
+          ))}
 
-      {!loadingClasses && classes && classes.length > 0 && (
-        <ScrollView style={styles.classesContainer}>
-          {classes.map(groupClass => (
+        {!loadingClasses &&
+          classes?.map(groupClass => (
             <Class
               key={groupClass.id}
               groupClass={groupClass}
               refetch={refetch}
             />
           ))}
-        </ScrollView>
-      )}
+      </ScrollView>
     </View>
   )
 }
