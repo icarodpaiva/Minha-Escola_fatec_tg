@@ -10,7 +10,7 @@ const currentDate = new Date()
 const currentHours = currentDate.getHours()
 currentDate.setHours(currentHours < 3 ? currentHours - 12 : currentHours)
 
-const initialDate = currentDate.toISOString()
+const initialDate = currentDate.toISOString().replace(/T.*/, "") // Remove time
 
 export const Classes = () => {
   const [date, setDate] = useState(initialDate)
