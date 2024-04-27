@@ -9,10 +9,10 @@ export interface PersonalData {
   id: number
   name: string
   email: string
+  registration?: string
   document: string
 
   // Only students has the data below
-  sr?: string
   course?: string
   semester?: number
 }

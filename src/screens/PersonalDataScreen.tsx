@@ -32,7 +32,7 @@ export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
     return <Loading />
   }
 
-  const { name, email, document, sr, course, semester } =
+  const { name, email, document, registration, course, semester } =
     route.params.personalData
 
   return (
@@ -42,13 +42,13 @@ export const PersonalDataScreen = ({ route }: PersonalDataScreenProps) => {
 
         <InfoText label="Nome" value={name} capitalize />
         <InfoText label="E-mail" value={email} />
+        <InfoText label="Matrícula" value={registration} />
         <InfoText label="CPF" value={document} />
-        <InfoText label="RA" value={sr} />
         <InfoText label="Curso" value={course} />
         <InfoText label="Semestre" value={semester ? `${semester}º` : null} />
 
         <View style={styles.qrCodeContainer}>
-          <QRCode value={sr ?? document} size={width - 32} quietZone={16} />
+          <QRCode value={registration} size={width - 32} quietZone={16} />
         </View>
       </ScrollView>
 

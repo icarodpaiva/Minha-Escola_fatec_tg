@@ -23,7 +23,7 @@ export const PersonalData = () => {
     return null
   }
 
-  const { name, course, sr, document } = personalData
+  const { name, course, registration, document } = personalData
 
   const handlePersonalData = () => {
     navigate("App", { screen: "PersonalData", params: { personalData } })
@@ -37,11 +37,13 @@ export const PersonalData = () => {
         <Text numberOfLines={2} style={styles.name}>
           {name}
         </Text>
-        {sr && <Text style={styles.info}>RA: {sr}</Text>}
+
+        <Text style={styles.info}>Matrícula: {registration}</Text>
+
         {course && <Text style={styles.info}>Curso: {course}</Text>}
       </View>
 
-      <QRCode size={40} value={sr ?? document} />
+      <QRCode size={40} value={registration} />
     </Pressable>
   )
 }
