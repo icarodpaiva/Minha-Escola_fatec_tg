@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
+import SkeletonPlaceholder from "react-native-skeleton-placeholder"
 import QRCode from "react-native-qrcode-svg"
-
-import { Loading } from "./Loading"
 
 import Profile from "../assets/svgs/profile.svg"
 
 import { theme } from "../configs/theme"
+import { useAuthContext } from "../contexts/AuthContext"
 import { usePersonalData } from "../hooks/usePersonalData"
 import { useNavigation } from "../hooks/useNavigation"
 
@@ -16,14 +16,14 @@ export const PersonalData = () => {
   const { navigate } = useNavigation()
 
   if (loadingPersonalData) {
-    return <Loading />
+    return <PersonalDataSkeleton />
   }
 
   if (!personalData) {
     return null
   }
 
-  const { name, course, registration, document } = personalData
+  const { name, course, registration } = personalData
 
   const handlePersonalData = () => {
     navigate("App", { screen: "PersonalData", params: { personalData } })
@@ -45,6 +45,36 @@ export const PersonalData = () => {
 
       <QRCode size={40} value={registration} />
     </Pressable>
+  )
+}
+
+const PersonalDataSkeleton = () => {
+  const { isStaff } = useAuthContext()
+
+  return (
+    <SkeletonPlaceholder backgroundColor={colors.gray}>
+      <SkeletonPlaceholder.Item style={styles.container}>
+        <SkeletonPlaceholder.Item width={40} height={40} borderRadius={40} />
+
+        <SkeletonPlaceholder.Item style={styles.dataContainer}>
+          <SkeletonPlaceholder.Item height={styles.name.fontSize} />
+
+          <SkeletonPlaceholder.Item
+            height={styles.info.fontSize}
+            marginTop={styles.info.marginTop}
+          />
+
+          {!isStaff && (
+            <SkeletonPlaceholder.Item
+              height={styles.info.fontSize}
+              marginTop={styles.info.marginTop}
+            />
+          )}
+        </SkeletonPlaceholder.Item>
+
+        <SkeletonPlaceholder.Item width={40} height={40} />
+      </SkeletonPlaceholder.Item>
+    </SkeletonPlaceholder>
   )
 }
 
