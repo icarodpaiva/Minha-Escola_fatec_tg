@@ -3,7 +3,8 @@ export const formatDate = (
   withWeekday?: boolean,
   withTime?: boolean
 ) => {
-  const dateObject = new Date(date.includes("T") ? date : `${date}T03:00:00Z`)
+  const dateObject = new Date(date)
+  dateObject.setHours(dateObject.getHours() - 3)
 
   return dateObject.toLocaleDateString("pt-BR", {
     weekday: withWeekday ? "long" : undefined,

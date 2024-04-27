@@ -7,8 +7,7 @@ import { Class, ClassSkeleton } from "./Class"
 import { useClasses } from "../hooks/useClasses"
 
 const currentDate = new Date()
-const currentHours = currentDate.getHours()
-currentDate.setHours(currentHours < 3 ? currentHours - 12 : currentHours)
+currentDate.setHours(currentDate.getHours() - 3)
 
 const initialDate = currentDate.toISOString().replace(/T.*/, "") // Remove time
 
