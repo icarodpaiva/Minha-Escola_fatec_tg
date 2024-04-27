@@ -1,9 +1,8 @@
 import React, { useEffect } from "react"
-import { ScrollView, Button, Text, StyleSheet } from "react-native"
+import { ScrollView, Button, StyleSheet } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { Loading } from "../components/Loading"
-import { Notification } from "../components/Notification"
+import { Notification, NotificationSkeleton } from "../components/Notification"
 
 import { useAuthContext } from "../contexts/AuthContext"
 import { useAppContext } from "../contexts/AppContext"
@@ -22,10 +21,6 @@ export const NotificationsScreen = () => {
     })
   }, [])
 
-  if (loadingNotifications) {
-    return <Loading />
-  }
-
   const handleCreateNotification = () => {
     navigate("App", { screen: "CreateNotification", params: { refetch } })
   }
@@ -39,15 +34,13 @@ export const NotificationsScreen = () => {
         />
       )}
 
-      {!notifications || notifications.length === 0 ? (
-        <Text>Sem notificações</Text>
-      ) : (
-        <>
-          {notifications.map(notification => (
+      {loadingNotifications
+        ? Array.from({ length: 3 }).map((_, index) => (
+            <NotificationSkeleton key={index} />
+          ))
+        : notifications?.map(notification => (
             <Notification key={notification.id} notification={notification} />
           ))}
-        </>
-      )}
     </ScrollView>
   )
 }

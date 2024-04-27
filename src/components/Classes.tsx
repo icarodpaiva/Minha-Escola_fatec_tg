@@ -22,19 +22,17 @@ export const Classes = () => {
       <DatePicker date={date} setDate={setDate} />
 
       <ScrollView style={styles.classesContainer}>
-        {loadingClasses &&
-          Array.from({ length: 3 }).map((_, index) => (
-            <ClassSkeleton key={index} />
-          ))}
-
-        {!loadingClasses &&
-          classes?.map(groupClass => (
-            <Class
-              key={groupClass.id}
-              groupClass={groupClass}
-              refetch={refetch}
-            />
-          ))}
+        {loadingClasses
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <ClassSkeleton key={index} />
+            ))
+          : classes?.map(groupClass => (
+              <Class
+                key={groupClass.id}
+                groupClass={groupClass}
+                refetch={refetch}
+              />
+            ))}
       </ScrollView>
     </View>
   )

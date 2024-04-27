@@ -1,6 +1,7 @@
 import { View, StyleSheet } from "react-native"
+import SkeletonPlaceholder from "react-native-skeleton-placeholder"
 
-import { InfoText } from "./InfoText"
+import { InfoText, styles as infoTextStyles } from "./InfoText"
 
 import { theme } from "../configs/theme"
 import { useAuthContext } from "../contexts/AuthContext"
@@ -34,6 +35,33 @@ export const Notification = ({ notification }: NotificationProps) => {
       <InfoText label="Título" value={title} />
       <InfoText label="Mensagem" value={message} />
     </View>
+  )
+}
+
+export const NotificationSkeleton = () => {
+  return (
+    <SkeletonPlaceholder backgroundColor={theme.colors.gray}>
+      <SkeletonPlaceholder.Item style={styles.container}>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SkeletonPlaceholder.Item
+            key={index}
+            flexDirection="row"
+            marginTop={infoTextStyles.info.marginTop}
+          >
+            <SkeletonPlaceholder.Item
+              width={60}
+              height={infoTextStyles.info.lineHeight}
+              marginRight={10}
+            />
+
+            <SkeletonPlaceholder.Item
+              flex={1}
+              height={infoTextStyles.infoValue.lineHeight}
+            />
+          </SkeletonPlaceholder.Item>
+        ))}
+      </SkeletonPlaceholder.Item>
+    </SkeletonPlaceholder>
   )
 }
 

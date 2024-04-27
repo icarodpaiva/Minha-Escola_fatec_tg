@@ -25,7 +25,7 @@ export const InfoText = ({ label, value, capitalize }: InfoTextProps) => {
   )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   info: {
     marginTop: 8,
     color: colors.darkGray,
