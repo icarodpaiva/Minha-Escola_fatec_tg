@@ -64,6 +64,22 @@ export const CreateNotificationScreen = ({
 
   const handleSend = async () => {
     try {
+      if (!title) {
+        return Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Escreva um título",
+          button: "Continuar"
+        })
+      }
+
+      if (!message) {
+        return Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Escreva uma mensagem",
+          button: "Continuar"
+        })
+      }
+
       if (selectedGroups.length === 0) {
         return Dialog.show({
           type: ALERT_TYPE.WARNING,
