@@ -6,6 +6,7 @@ import { InfoText, styles as infoTextStyles } from "./InfoText"
 import { theme } from "../configs/theme"
 import { useAuthContext } from "../contexts/AuthContext"
 import { formatDate } from "../utils/formatDate"
+import { fixDate } from "../utils/fixDate"
 
 import type { Notification as INotification } from "../hooks/useNotifications"
 
@@ -29,7 +30,7 @@ export const Notification = ({ notification }: NotificationProps) => {
       />
       <InfoText
         label="Data"
-        value={formatDate(created_at, true, true)}
+        value={formatDate(fixDate(created_at), true, true)}
         capitalize
       />
       <InfoText label="Título" value={title} />

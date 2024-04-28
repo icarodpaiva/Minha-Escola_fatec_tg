@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     lineHeight: sizes.large
   },
   headerClose: {
+    marginLeft: 16,
     paddingBottom: 8
   }
 })

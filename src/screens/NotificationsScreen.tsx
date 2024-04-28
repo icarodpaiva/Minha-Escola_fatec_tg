@@ -1,8 +1,9 @@
 import React, { useEffect } from "react"
-import { ScrollView, Button, StyleSheet } from "react-native"
+import { View, ScrollView, StyleSheet } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Notification, NotificationSkeleton } from "../components/Notification"
+import { Button } from "../components/Button"
 
 import { useAuthContext } from "../contexts/AuthContext"
 import { useAppContext } from "../contexts/AppContext"
@@ -26,22 +27,21 @@ export const NotificationsScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {isStaff && (
-        <Button
-          title="Enviar nova notificação"
-          onPress={handleCreateNotification}
-        />
-      )}
+    <View style={styles.container}>
+      <ScrollView style={styles.notificationsContainer}>
+        {loadingNotifications
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <NotificationSkeleton key={index} />
+            ))
+          : notifications?.map(notification => (
+              <Notification key={notification.id} notification={notification} />
+            ))}
+      </ScrollView>
 
-      {loadingNotifications
-        ? Array.from({ length: 3 }).map((_, index) => (
-            <NotificationSkeleton key={index} />
-          ))
-        : notifications?.map(notification => (
-            <Notification key={notification.id} notification={notification} />
-          ))}
-    </ScrollView>
+      {isStaff && (
+        <Button text="Nova notificação" onPress={handleCreateNotification} />
+      )}
+    </View>
   )
 }
 
@@ -51,5 +51,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 16,
     paddingHorizontal: 16
+  },
+  notificationsContainer: {
+    flex: 1,
+    marginBottom: 16
   }
 })

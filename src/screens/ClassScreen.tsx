@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     color: colors.darkestGray
   },
   input: {
-    marginBottom: 8,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: colors.gray,
     borderRadius: 8,

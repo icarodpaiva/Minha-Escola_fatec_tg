@@ -4,7 +4,6 @@ export const formatDate = (
   withTime?: boolean
 ) => {
   const dateObject = new Date(date)
-  dateObject.setHours(dateObject.getHours() - 3)
 
   return dateObject.toLocaleDateString("pt-BR", {
     weekday: withWeekday ? "long" : undefined,

@@ -60,7 +60,7 @@ export const AppStack = () => {
         <Screen
           name="CreateNotification"
           component={CreateNotificationScreen}
-          options={{ headerTitle: "Criar notificação" }}
+          options={{ headerTitle: "Nova notificação" }}
         />
       </Navigator>
     </AppContextProvider>

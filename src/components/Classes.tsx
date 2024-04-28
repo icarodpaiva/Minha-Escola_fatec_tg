@@ -5,11 +5,9 @@ import { DatePicker } from "./DatePicker"
 import { Class, ClassSkeleton } from "./Class"
 
 import { useClasses } from "../hooks/useClasses"
+import { fixDate } from "../utils/fixDate"
 
-const currentDate = new Date()
-currentDate.setHours(currentDate.getHours() - 3)
-
-const initialDate = currentDate.toISOString().replace(/T.*/, "") // Remove time
+const initialDate = fixDate().replace(/T.*/, "") // Remove time
 
 export const Classes = () => {
   const [date, setDate] = useState(initialDate)

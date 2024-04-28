@@ -4,13 +4,17 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Button,
   Pressable,
   TextInput
 } from "react-native"
+import { Dialog, ALERT_TYPE } from "react-native-alert-notification"
+import SkeletonPlaceholder from "react-native-skeleton-placeholder"
 
 import { Loading } from "../components/Loading"
+import { Button } from "../components/Button"
+import { Modal } from "../components/Modal"
 
+import { theme } from "../configs/theme"
 import { useAuthContext } from "../contexts/AuthContext"
 import { useGroups } from "../hooks/useGroups"
 import { useNavigation } from "../hooks/useNavigation"
@@ -18,6 +22,8 @@ import { createNotification } from "../api/createNotification"
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { AppStackParamList } from "../navigation/AppStack"
+
+const { colors, sizes } = theme
 
 type CreateNotificationScreenProps = NativeStackScreenProps<
   AppStackParamList,
@@ -27,26 +33,23 @@ type CreateNotificationScreenProps = NativeStackScreenProps<
 export const CreateNotificationScreen = ({
   route
 }: CreateNotificationScreenProps) => {
-  const [selectedGroups, setSelectedGroups] = useState<number[]>([])
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
+  const [selectedGroups, setSelectedGroups] = useState<number[]>([])
+  const [isChoosingGroups, setIsChoosingGroups] = useState(false)
+  const [isSending, setIsSending] = useState(false)
 
   const { accessToken } = useAuthContext()
   const { loadingGroups, groups } = useGroups()
   const { goBack } = useNavigation()
 
-  if (loadingGroups) {
-    return <Loading />
+  const handleToggleChooseGroups = () => {
+    setIsChoosingGroups(prevState => !prevState)
   }
 
-  if (!groups?.length) {
-    return (
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Text>
-          Não há turmas a serem selecionadas, contate o administrador.
-        </Text>
-      </View>
-    )
+  const handleCancel = () => {
+    setSelectedGroups([])
+    setIsChoosingGroups(false)
   }
 
   const handleSelectGroup = (id: number) => {
@@ -61,71 +64,183 @@ export const CreateNotificationScreen = ({
 
   const handleSend = async () => {
     try {
+      if (selectedGroups.length === 0) {
+        return Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Selecione as turmas",
+          button: "Continuar"
+        })
+      }
+
+      setIsSending(true)
+
       await createNotification(
         { topics: selectedGroups, title, message },
         accessToken
       )
-
       route.params.refetch()
+
       goBack()
     } catch {
-      setSelectedGroups([])
-      setTitle("")
-      setMessage("")
+      return Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Falha no envio, tente novamente",
+        button: "Continuar"
+      })
+    } finally {
+      setIsSending(false)
     }
   }
 
+  if (isSending) {
+    return <Loading />
+  }
+
   return (
-    <View>
-      <ScrollView>
-        <Text>Turmas:</Text>
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.inputLabel}>Título:</Text>
+        <TextInput
+          value={title}
+          onChangeText={setTitle}
+          placeholder="Título"
+          placeholderTextColor={colors.darkGray}
+          autoCapitalize="sentences"
+          style={styles.input}
+        />
 
-        {groups.map(({ id, name, subject }) => (
-          <Pressable
-            key={id}
-            onPress={() => handleSelectGroup(id)}
-            style={
-              selectedGroups.includes(id) ? styles.selectedGroup : undefined
-            }
-          >
-            <Text>{subject}</Text>
-            <Text>{name}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
+        <Text style={styles.inputLabel}>Mensagem:</Text>
+        <TextInput
+          value={message}
+          onChangeText={setMessage}
+          placeholder="Mensagem"
+          placeholderTextColor={colors.darkGray}
+          multiline={true}
+          numberOfLines={3}
+          autoCapitalize="sentences"
+          style={styles.input}
+        />
 
-      <Text>Título:</Text>
-      <TextInput
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Título"
-        autoCapitalize="sentences"
-      />
+        <Button text="Selecionar turmas" onPress={handleToggleChooseGroups} />
 
-      <Text>Mensagem:</Text>
-      <TextInput
-        value={message}
-        onChangeText={setMessage}
-        placeholder="Mensagem"
-        autoCapitalize="sentences"
-      />
+        <Modal
+          visible={isChoosingGroups}
+          onCancel={handleToggleChooseGroups}
+          title="Selecionar turmas"
+        >
+          <ScrollView>
+            {loadingGroups
+              ? Array.from({ length: 5 }).map((_, index) => (
+                  <GroupSkeleton key={index} />
+                ))
+              : groups?.map(({ id, name, subject }) => (
+                  <Pressable
+                    key={id}
+                    onPress={() => handleSelectGroup(id)}
+                    style={[
+                      styles.group,
+                      selectedGroups.includes(id) && styles.selectedGroup
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.groupText,
+                        selectedGroups.includes(id) && styles.selectedGroupText
+                      ]}
+                    >
+                      {subject}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.groupText,
+                        selectedGroups.includes(id) && styles.selectedGroupText
+                      ]}
+                    >
+                      {name}
+                    </Text>
+                  </Pressable>
+                ))}
+          </ScrollView>
 
-      <Button title="Enviar notificação" onPress={handleSend} />
+          <View style={styles.editButtonsContainer}>
+            <Button text="Cancelar" onPress={handleCancel} />
+            <Button text="Confirmar" onPress={handleToggleChooseGroups} />
+          </View>
+        </Modal>
+      </View>
+
+      <Button text="Enviar notificação" onPress={handleSend} />
     </View>
   )
 }
 
+const GroupSkeleton = () => {
+  return (
+    <SkeletonPlaceholder backgroundColor={theme.colors.gray}>
+      <SkeletonPlaceholder.Item style={styles.group}>
+        <SkeletonPlaceholder.Item
+          height={styles.groupText.lineHeight}
+          marginBottom={styles.groupText.marginBottom}
+        />
+
+        <SkeletonPlaceholder.Item
+          height={styles.groupText.lineHeight}
+          marginBottom={styles.groupText.marginBottom}
+        />
+      </SkeletonPlaceholder.Item>
+    </SkeletonPlaceholder>
+  )
+}
+
 const styles = StyleSheet.create({
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch"
+  container: {
+    flex: 1,
+    marginVertical: 16,
+    paddingHorizontal: 16,
+    justifyContent: "space-between"
   },
-  mt20: {
-    marginTop: 20
+  inputLabel: {
+    marginBottom: 2,
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium,
+    color: colors.darkestGray
+  },
+  input: {
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: colors.gray,
+    borderRadius: 8,
+    padding: 8,
+    backgroundColor: colors.white,
+    color: colors.darkestGray,
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium
+  },
+  editButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 16
+  },
+  group: {
+    borderWidth: 1,
+    borderColor: colors.gray,
+    borderRadius: 8,
+    marginTop: 8,
+    padding: 8,
+    paddingBottom: 0
   },
   selectedGroup: {
-    borderWidth: 1,
-    borderColor: "red"
+    borderColor: colors.main,
+    backgroundColor: colors.main
+  },
+  groupText: {
+    marginBottom: 8,
+    color: colors.darkestGray,
+    fontSize: sizes.medium,
+    lineHeight: sizes.medium
+  },
+  selectedGroupText: {
+    color: colors.white
   }
 })
