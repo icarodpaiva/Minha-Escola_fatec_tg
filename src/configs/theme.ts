@@ -1,6 +1,4 @@
 export const theme = {
-  fonts: {},
-
   sizes: {
     small: 14,
     medium: 16,
