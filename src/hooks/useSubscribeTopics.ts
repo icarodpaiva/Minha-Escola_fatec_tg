@@ -18,7 +18,9 @@ export const useSubscribeTopics = () => {
     const request = async () => {
       const data = await getGroups(accessToken)
 
-      setTopics(data.map(({ id }) => String(id)))
+      const ids = data.map(({ id }) => String(id))
+
+      setTopics([...ids, "3"]) // 3 is the topic for admin channel
     }
 
     request()

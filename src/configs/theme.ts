@@ -1,9 +1,9 @@
 export const theme = {
   sizes: {
-    small: 14,
-    medium: 16,
-    large: 18,
-    xLarge: 32
+    small: 16,
+    medium: 18,
+    large: 20,
+    xLarge: 36
   },
 
   colors: {
